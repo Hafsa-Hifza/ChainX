@@ -1,0 +1,1510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Theater — Home</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+        :root{
+            --bg:#111213;--bg-2:#242526;--surface:#2d2e30;--surface-2:#3a3b3c;--surface-3:#404142;
+            --border:#3e4042;--border-2:#4e4f50;--text-1:#e4e6eb;--text-2:#b0b3b8;--text-3:#65676b;
+            --accent:#a78bfa;--accent-2:#8b5cf6;--accent-soft:rgba(167,139,250,0.15);
+            --accent-glow:rgba(139,92,246,0.4);--green:#42b72a;--red:#e41e3f;
+            --safe-b:env(safe-area-inset-bottom,0px);
+        }
+        html,body{height:100%;overflow:hidden}
+        body{background:var(--bg);color:var(--text-1);font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;max-width:430px;margin:0 auto;-webkit-font-smoothing:antialiased;position:relative;}
+
+        /* PAGE WRAPPER */
+        .page{position:absolute;top:0;left:0;right:0;bottom:0;overflow-y:auto;overflow-x:hidden;z-index:1;padding-bottom:calc(58px + var(--safe-b));scrollbar-width:none}
+        .page::-webkit-scrollbar{display:none}
+        @keyframes pageIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+
+        /* ── HOME TOP BAR ── */
+        .h-top-bar{position:sticky;top:0;z-index:52;background:#242526;box-shadow:0 1px 0 rgba(255,255,255,0.04);}
+        .h-sections{display:flex;align-items:center;justify-content:space-around;padding:0;background:#242526;border-bottom:1px solid rgba(255,255,255,0.04);}
+        .h-sec-tab{flex:1;display:flex;align-items:center;justify-content:center;height:40px;cursor:pointer;position:relative;user-select:none;-webkit-tap-highlight-color:transparent;}
+        .h-sec-tab .ico-out,.h-sec-tab .ico-fill{width:26px;height:26px;position:absolute;inset:0;margin:auto;transition:opacity .2s ease;}
+        .h-sec-tab .ico-out{stroke:#e4e6eb;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;fill:none;opacity:1;}
+        .h-sec-tab .ico-fill{color:var(--accent);opacity:0;}
+        .h-sec-tab.on .ico-out{opacity:0;}
+        .h-sec-tab.on .ico-fill{opacity:1;}
+        .h-sec-badge{position:absolute;top:5px;right:calc(50% - 19px);min-width:15px;height:15px;padding:0 4px;border-radius:8px;background:var(--red);color:#fff;font-size:8px;font-weight:700;display:flex;align-items:center;justify-content:center;border:2px solid #242526;pointer-events:none;}
+        .h-sec-panel{display:none}
+        .h-sec-panel.on{display:block;animation:secPanelIn .3s cubic-bezier(.22,1,.36,1)}
+        @keyframes secPanelIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+        /* ── HEADER ── */
+        .h-hdr{background:#242526}
+        .h-hdr-row{display:flex;align-items:center;justify-content:space-between;padding:8px 14px}
+        .h-hdr-left{display:flex;align-items:center}
+        .h-hdr-title{font-size:23px;font-weight:900;letter-spacing:-.5px;line-height:1}
+        .h-hdr-actions{display:flex;align-items:center;gap:8px}
+        .h-hdr-btn{width:28px;height:28px;border-radius:7px;background:#2e2f31;border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative;}
+        .h-hdr-btn:active{opacity:.7}
+        .h-hdr-btn svg{width:22px;height:22px;stroke:var(--text-1);stroke-width:2.9;stroke-linecap:round;stroke-linejoin:round;fill:none}
+
+        /* ── SCENE CARDS (STORIES) ── */
+        .h-scenes-wrap{background:transparent;margin-bottom:0;}
+        .h-scenes{display:flex;gap:12px;padding:12px 16px 10px;overflow-x:auto;scrollbar-width:none}
+        .h-scenes::-webkit-scrollbar{display:none}
+        .h-scene{flex-shrink:0;cursor:pointer;position:relative}
+        .h-scene-card{width:95px;height:150px;border-radius:16px;position:relative;overflow:hidden;background:var(--bg-2);transition:all .25s cubic-bezier(.4,0,.2,1);box-shadow:0 4px 20px rgba(0,0,0,.3);}
+        .h-scene:active .h-scene-card{transform:scale(.95)}
+        .h-scene-card::before{content:'';position:absolute;inset:-2.5px;border-radius:18px;z-index:0;background:conic-gradient(from 0deg, transparent 0%, transparent 55%, var(--accent) 65%, #c084fc 75%, var(--accent) 85%, transparent 90%, transparent 100%);animation:sceneSpin 2.8s linear infinite;}
+        .h-scene-card::after{content:'';position:absolute;inset:2.5px;border-radius:14px;background:var(--bg-2);z-index:1}
+        @keyframes sceneSpin{to{transform:rotate(360deg)}}
+        .h-scene-card.seen::before{background:rgba(255,255,255,0.08);animation:none}
+        .h-scene-card.add::before{background:transparent;animation:none}
+        .h-scene-card.add::after{inset:0;border-radius:16px;border:2px dashed rgba(167,139,250,.4);background:linear-gradient(160deg,rgba(139,92,246,.08),rgba(124,58,237,.04))}
+        .h-scene-card.live::before{background:conic-gradient(from 0deg, transparent 0%, #ef4444 25%, #ff6b6b 50%, #ef4444 75%, transparent 100%);animation:sceneSpin 1.4s linear infinite;box-shadow:0 0 20px rgba(239,68,68,.3)}
+        .h-scene-thumb{position:absolute;inset:2.5px;z-index:2;border-radius:14px;overflow:hidden}
+        .h-scene-thumb img{width:100%;height:100%;object-fit:cover;transition:transform .4s ease}
+        .h-scene:hover .h-scene-thumb img{transform:scale(1.05)}
+        .h-scene-thumb::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.5) 0%,transparent 35%,transparent 60%,rgba(0,0,0,.7) 100%);pointer-events:none}
+        .h-scene-user{position:absolute;top:8px;left:8px;z-index:5;display:flex;align-items:center;gap:6px}
+        .h-scene-user img{width:26px;height:26px;border-radius:50%;object-fit:cover;border:2px solid rgba(255,255,255,.9);box-shadow:0 2px 8px rgba(0,0,0,.3)}
+        .h-scene-user-name{font-size:10px;font-weight:600;color:#fff;text-shadow:0 1px 4px rgba(0,0,0,.6);max-width:50px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+        .h-scene-add-content{position:absolute;inset:2.5px;z-index:2;border-radius:14px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;background:linear-gradient(160deg,rgba(139,92,246,.12),rgba(124,58,237,.06))}
+        .h-scene-add-icon{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--accent-2),#7c3aed);display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px var(--accent-glow);transition:transform .2s ease}
+        .h-scene:hover .h-scene-add-icon{transform:scale(1.1)}
+        .h-scene-add-icon svg{width:18px;height:18px;stroke:#fff;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;fill:none}
+        .h-scene-add-text{font-size:10px;font-weight:600;color:var(--text-2);text-align:center}
+        .h-scene-card.seen .h-scene-thumb img{filter:brightness(.5) saturate(.3)}
+        .h-scene-card.seen .h-scene-user img{opacity:.7}
+        .h-scene-live-badge{position:absolute;bottom:10px;left:50%;transform:translateX(-50%);z-index:5;background:var(--red);color:#fff;font-size:9px;font-weight:800;letter-spacing:.6px;padding:4px 10px;border-radius:6px;display:flex;align-items:center;gap:4px;box-shadow:0 2px 10px rgba(239,68,68,.4);animation:liveBadgePulse 1.5s ease-in-out infinite;}
+        .h-scene-live-badge::before{content:'';width:5px;height:5px;border-radius:50%;background:#fff;animation:liveDotPulse 1s ease-in-out infinite}
+        @keyframes liveBadgePulse{0%,100%{opacity:1}50%{opacity:.85}}
+        @keyframes liveDotPulse{0%,100%{opacity:1}50%{opacity:.5}}
+        .h-scene-views{position:absolute;bottom:10px;left:8px;z-index:5;display:flex;align-items:center;gap:3px;font-size:9px;font-weight:600;color:rgba(255,255,255,.9);text-shadow:0 1px 3px rgba(0,0,0,.5)}
+        .h-scene-views svg{width:10px;height:10px;stroke:currentColor;stroke-width:2;fill:none}
+
+        /* ── SECTION HEADER IN FEED ── */
+        .h-sec{display:flex;align-items:center;justify-content:space-between;padding:8px 16px 10px}
+        .h-sec-t{font-size:13px;font-weight:700;color:var(--text-2);letter-spacing:.2px}
+        .h-sec-a{font-size:12px;font-weight:600;color:var(--accent);cursor:pointer}
+
+        /* ── POST CARDS ── */
+        .h-post{background:var(--bg-2);margin-bottom:2px;padding:14px 16px 0;position:relative;border-top:1px solid #2e2f31;border-bottom:1px solid #1a1b1c}
+        .h-post-hdr{display:flex;align-items:flex-start;gap:10px;margin-bottom:10px}
+        .h-post-av{width:44px;height:44px;border-radius:50%;object-fit:cover;flex-shrink:0;border:none}
+        .h-post-meta{flex:1;min-width:0}
+        .h-post-name-row{display:flex;align-items:center;gap:5px;flex-wrap:wrap}
+        .h-post-name{font-size:15px;font-weight:700;color:var(--text-1)}
+        .h-post-verified svg{width:15px;height:15px}
+        .h-post-badge{font-size:9px;font-weight:700;letter-spacing:.3px;padding:2px 8px;border-radius:10px;background:var(--accent-soft);color:var(--accent)}
+        .h-post-badge.live-badge{background:rgba(239,68,68,.18);color:#ef4444}
+        .h-post-badge.ad-badge{background:rgba(255,255,255,.06);color:var(--text-3)}
+        .h-post-sub{display:flex;align-items:center;gap:4px;margin-top:3px;font-size:12px;color:var(--text-3)}
+        .h-post-sub svg{width:12px;height:12px;stroke:currentColor;stroke-width:2;fill:none;stroke-linecap:round}
+        .h-post-more{width:36px;height:36px;display:flex;align-items:center;justify-content:center;border-radius:50%;cursor:pointer;margin-left:auto;flex-shrink:0;transition:background .2s}
+        .h-post-more:active{background:#3a3b3c}
+        .h-post-more svg{width:20px;height:20px;fill:var(--text-2)}
+        .h-post-body{font-size:15px;color:var(--text-1);line-height:1.6;padding-bottom:12px;word-break:break-word}
+        .h-post-body.big{font-size:19px;line-height:1.5;font-weight:500}
+        .h-post-link{display:block;border:1px solid var(--border);border-radius:4px;overflow:hidden;margin-bottom:12px;cursor:pointer;transition:opacity .2s}
+        .h-post-link:active{opacity:.85}
+        .h-post-link-img{width:100%;height:130px;object-fit:cover;display:block;background:var(--bg-2)}
+        .h-post-link-meta{padding:8px 12px;background:rgba(255,255,255,0.03)}
+        .h-post-link-src{font-size:10px;color:var(--text-3);text-transform:uppercase;letter-spacing:.4px}
+        .h-post-link-title{font-size:13px;font-weight:600;color:var(--text-1);margin-top:2px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+        .h-post-img{width:calc(100% + 32px);margin:0 -16px 0;display:block;max-height:380px;object-fit:cover;background:var(--bg-2);cursor:pointer}
+        .h-post-img-grid{display:grid;gap:2px;width:calc(100% + 32px);margin:0 -16px}
+        .h-post-img-grid.two{grid-template-columns:1fr 1fr}
+        .h-post-img-grid img{width:100%;height:170px;object-fit:cover;cursor:pointer}
+        .h-post-video{position:relative;width:calc(100% + 32px);margin:0 -16px;background:#000;cursor:pointer}
+        .h-post-video img{width:100%;aspect-ratio:16/9;object-fit:cover;display:block;opacity:.85}
+        .h-post-video-play{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:56px;height:56px;border-radius:50%;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;border:2.5px solid rgba(255,255,255,.5)}
+        .h-post-video-play svg{width:22px;height:22px;fill:#fff;margin-left:3px}
+        .h-post-video-meta{position:absolute;bottom:0;left:0;right:0;padding:10px 14px;background:linear-gradient(to top,rgba(0,0,0,.85),transparent);display:flex;align-items:center;gap:6px}
+        .h-post-video-dur{font-size:12px;font-weight:700;color:#fff}
+        .h-post-video-views{font-size:11px;color:rgba(255,255,255,.7);display:flex;align-items:center;gap:3px;margin-left:auto}
+        .h-post-video-views svg{width:12px;height:12px;stroke:#fff;stroke-width:2;fill:none}
+        .h-post-reel{position:relative;width:calc(100% + 32px);margin:0 -16px;background:#000;cursor:pointer;overflow:hidden}
+        .h-post-reel img{width:100%;aspect-ratio:9/16;max-height:420px;object-fit:cover;display:block}
+        .h-post-reel-overlay{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end;background:linear-gradient(to top,rgba(0,0,0,.72) 0%,transparent 55%);padding:14px 16px}
+        .h-post-reel-play{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:60px;height:60px;border-radius:50%;background:rgba(255,255,255,.18);border:2.5px solid rgba(255,255,255,.5);display:flex;align-items:center;justify-content:center}
+        .h-post-reel-play svg{width:24px;height:24px;fill:#fff;margin-left:3px}
+        .h-post-reel-label{font-size:11px;font-weight:700;color:rgba(255,255,255,.7);letter-spacing:.5px;text-transform:uppercase;margin-bottom:4px}
+        .h-post-reel-title{font-size:14px;font-weight:600;color:#fff;line-height:1.4}
+        .h-post-reactions{display:flex;align-items:center;gap:10px;padding:10px 0 9px;border-top:1px solid #2e2f31;margin-top:6px}
+        .h-post-react-pile{display:flex;align-items:center;gap:1px}
+        .h-post-react-pile span{font-size:16px}
+        .h-post-react-count{font-size:13px;color:var(--text-3);margin-left:4px}
+        .h-post-react-right{display:flex;align-items:center;gap:8px;margin-left:auto;font-size:13px;color:var(--text-3)}
+        .h-post-actions{display:flex;align-items:center;border-top:1px solid #2e2f31;padding:2px 0 4px}
+        .h-post-act{flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:9px 4px;border-radius:8px;cursor:pointer;font-size:13px;font-weight:600;color:var(--text-2);transition:all .18s ease;user-select:none}
+        .h-post-act:active{background:#3a3b3c;color:var(--text-1)}
+        .h-post-act.liked{color:var(--accent)}
+        .h-post-act.liked svg{stroke:var(--accent)}
+        .h-post-act svg{width:19px;height:19px;stroke:currentColor;stroke-width:2;fill:none;stroke-linecap:round;stroke-linejoin:round}
+        .h-post-act-sep{display:none}
+
+        /* ── ROOM SUGGESTION IN FEED ── */
+        .h-room-suggest{background:var(--bg-2);margin-bottom:2px;padding:14px 16px;border-top:1px solid #2e2f31;border-bottom:1px solid #1a1b1c}
+        .h-room-suggest-label{font-size:10px;font-weight:700;color:var(--text-3);letter-spacing:.6px;text-transform:uppercase;margin-bottom:10px;display:flex;align-items:center;gap:6px}
+        .h-room-suggest-label::before{content:'';width:14px;height:1px;background:rgba(255,255,255,0.08)}
+        .h-room-suggest-label::after{content:'';flex:1;height:1px;background:rgba(255,255,255,0.08)}
+        .h-room-cards-row{display:flex;gap:10px;overflow-x:auto;scrollbar-width:none}
+        .h-room-cards-row::-webkit-scrollbar{display:none}
+        .h-room-card{flex-shrink:0;width:200px;border-radius:12px;overflow:hidden;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.05);cursor:pointer;transition:transform .2s ease}
+        .h-room-card:active{transform:scale(.97)}
+        .h-room-card-img{position:relative;height:110px;overflow:hidden;background:var(--bg)}
+        .h-room-card-img img{width:100%;height:100%;object-fit:cover}
+        .h-room-card-img::after{content:'';position:absolute;bottom:0;left:0;right:0;height:50%;background:linear-gradient(to top,rgba(24,25,26,.9),transparent);pointer-events:none}
+        .h-room-card-live{position:absolute;top:8px;left:8px;z-index:2;display:flex;align-items:center;gap:4px;background:rgba(239,68,68,.85);padding:3px 8px;border-radius:10px;font-size:9px;font-weight:700;color:#fff}
+        .h-room-card-live .ld{width:5px;height:5px;border-radius:50%;background:#fff;animation:livePulse 1.5s ease-in-out infinite}
+        @keyframes livePulse{0%,100%{box-shadow:0 0 0 0 rgba(34,197,94,.5)}50%{box-shadow:0 0 0 5px rgba(34,197,94,0)}}
+        .h-room-card-watchers{position:absolute;bottom:8px;right:8px;z-index:2;display:flex;align-items:center;gap:3px;font-size:10px;font-weight:600;color:rgba(255,255,255,.85)}
+        .h-room-card-watchers svg{width:12px;height:12px;stroke:#fff;stroke-width:2}
+        .h-room-card-body{padding:10px 12px 12px}
+        .h-room-card-name{font-size:13px;font-weight:700;color:var(--text-1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+        .h-room-card-host{display:flex;align-items:center;gap:6px;margin-top:6px}
+        .h-room-card-host img{width:20px;height:20px;border-radius:50%;object-fit:cover}
+        .h-room-card-host span{font-size:11px;color:var(--text-2);flex:1}
+        .h-room-card-join{font-size:10px;font-weight:700;color:#fff;background:linear-gradient(135deg,var(--accent-2),#7c3aed);padding:4px 12px;border-radius:12px;border:none;cursor:pointer}
+
+        /* ── CHANNEL SUGGESTION IN FEED ── */
+        .h-ch-suggest{background:var(--bg-2);margin-bottom:2px;padding:14px 0;border-top:1px solid #2e2f31;border-bottom:1px solid #1a1b1c}
+        .h-ch-suggest-label{font-size:10px;font-weight:700;color:var(--text-3);letter-spacing:.6px;text-transform:uppercase;margin-bottom:10px;padding:0 16px;display:flex;align-items:center;justify-content:space-between}
+        .h-ch-suggest-see{font-size:12px;font-weight:600;color:var(--accent);text-transform:none;letter-spacing:0;cursor:pointer}
+        .h-ch-row{display:flex;gap:10px;overflow-x:auto;padding:0 16px;scrollbar-width:none}
+        .h-ch-row::-webkit-scrollbar{display:none}
+        .h-ch-card{flex-shrink:0;width:130px;padding:14px 12px;border-radius:12px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.05);text-align:center;cursor:pointer;transition:transform .2s}
+        .h-ch-card:active{transform:scale(.96)}
+        .h-ch-card img{width:44px;height:44px;border-radius:14px;object-fit:cover;margin:0 auto 8px;display:block}
+        .h-ch-card-name{font-size:12px;font-weight:700;color:var(--text-1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+        .h-ch-card-subs{font-size:10px;color:var(--text-3);margin-top:2px}
+        .h-ch-card-follow{margin-top:8px;padding:5px 0;border-radius:12px;background:var(--accent-soft);border:1px solid rgba(139,92,246,.2);color:var(--accent);font-size:10px;font-weight:700;cursor:pointer;transition:all .2s;display:block;width:100%}
+        .h-ch-card-follow.following{background:rgba(255,255,255,.05);border-color:var(--border);color:var(--text-3)}
+
+        /* ── TRENDING TOPIC CARD ── */
+        .h-trend{background:var(--bg-2);margin-bottom:2px;padding:14px 16px;border-top:1px solid #2e2f31;border-bottom:1px solid #1a1b1c}
+        .h-trend-label{font-size:10px;font-weight:700;color:var(--accent);letter-spacing:.5px;text-transform:uppercase;margin-bottom:8px}
+        .h-trend-title{font-size:16px;font-weight:800;color:var(--text-1);margin-bottom:4px}
+        .h-trend-meta{font-size:12px;color:var(--text-3);display:flex;align-items:center;gap:8px}
+
+        /* ── SPONSORED AD POST ── */
+        .h-ad-banner{background:var(--bg-2);margin-bottom:2px;padding:14px 16px;display:flex;align-items:center;gap:12px;cursor:pointer;border-top:1px solid #2e2f31;border-bottom:1px solid #1a1b1c}
+        .h-ad-banner:active{background:var(--surface)}
+        .h-ad-img{width:70px;height:70px;border-radius:14px;object-fit:cover;flex-shrink:0;background:var(--bg)}
+        .h-ad-body{flex:1;min-width:0}
+        .h-ad-label{font-size:9px;font-weight:700;color:var(--text-3);letter-spacing:.4px;text-transform:uppercase;margin-bottom:4px}
+        .h-ad-title{font-size:14px;font-weight:700;color:var(--text-1);line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+        .h-ad-desc{font-size:12px;color:var(--text-3);margin-top:3px;display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden}
+        .h-ad-cta{margin-top:6px;display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:700;color:var(--accent);cursor:pointer}
+        .h-ad-cta svg{width:12px;height:12px;stroke:var(--accent);stroke-width:2.5;fill:none}
+
+        /* ── THEATER AI SUGGEST CARD ── */
+        .h-ai-suggest{background:var(--bg-2);margin-bottom:2px;padding:14px 16px;border-top:1px solid #2e2f31;border-bottom:1px solid #1a1b1c}
+        .h-ai-label{display:flex;align-items:center;gap:6px;font-size:11px;font-weight:700;color:var(--accent);letter-spacing:.3px;margin-bottom:10px}
+        .h-ai-label svg{width:14px;height:14px;stroke:var(--accent);stroke-width:2;fill:none}
+        .h-ai-chips{display:flex;gap:6px;flex-wrap:wrap}
+        .h-ai-chip{padding:6px 12px;border-radius:12px;background:var(--accent-soft);border:1px solid rgba(167,139,250,.2);font-size:12px;font-weight:600;color:var(--accent);cursor:pointer;transition:all .2s}
+        .h-ai-chip:active{background:var(--accent-2);color:#fff}
+
+        /* ── PEOPLE YOU MAY KNOW ── */
+        .h-people-row{background:var(--bg-2);margin-bottom:2px;padding:14px 0;border-top:1px solid #2e2f31;border-bottom:1px solid #1a1b1c}
+        .h-people-label{padding:0 16px 10px;font-size:13px;font-weight:700}
+        .h-people-scroll{display:flex;gap:10px;padding:0 16px;overflow-x:auto;scrollbar-width:none}
+        .h-people-scroll::-webkit-scrollbar{display:none}
+        .h-person{flex-shrink:0;width:100px;padding:12px 8px;border-radius:12px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.05);text-align:center;cursor:pointer;transition:transform .2s}
+        .h-person:active{transform:scale(.95)}
+        .h-person img{width:44px;height:44px;border-radius:50%;object-fit:cover;margin:0 auto 6px;display:block;border:2px solid var(--border)}
+        .h-person-name{font-size:11px;font-weight:600;color:var(--text-1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+        .h-person-mutual{font-size:10px;color:var(--text-3);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+        .h-person-add{margin-top:7px;width:100%;padding:5px 0;border-radius:10px;background:var(--accent-soft);border:1px solid rgba(139,92,246,.2);color:var(--accent);font-size:10px;font-weight:700;cursor:pointer}
+
+        /* ── CONNECT SECTION ── */
+        #panelConnect,#panelReels,#panelNotif{background:var(--bg-2)}
+        .connect-hdr{padding:20px 16px 16px}
+        .connect-hdr h3{font-size:26px;font-weight:900;letter-spacing:-.5px;color:var(--text-1)}
+        .connect-list{padding:0}
+        
+        /* ── SECTION LABELS ── */
+        .connect-section-hdr{display:flex;align-items:center;padding:24px 16px 14px;border:none}
+        .connect-section-title{font-size:15px;font-weight:700;letter-spacing:0;text-transform:none;color:#ffffff}
+        .connect-section-count{min-width:22px;height:22px;padding:0 7px;border-radius:11px;background:rgba(255,255,255,.12);color:#ffffff;font-size:11px;font-weight:800;margin-left:auto;display:flex;align-items:center;justify-content:center}
+        .connect-section-see-all{font-size:13px;font-weight:600;color:#3b82f6;cursor:pointer;margin-left:auto;transition:opacity .15s ease;user-select:none}
+        .connect-section-see-all:active{opacity:.7}
+        
+        /* ── SECTION SEPARATION ── */
+        .connect-list{padding:0 0 4px;background:var(--bg-2)}
+        .connect-section-divider{height:0;background:transparent;border:none}
+        .connect-section-divider + .connect-section-hdr{border-top:1px solid rgba(255,255,255,.14);margin-top:12px;padding-top:28px}
+        .connect-item{display:flex;align-items:center;gap:12px;padding:12px 16px;background:var(--bg-2);margin-bottom:2px;border-top:1px solid #2e2f31;border-bottom:1px solid #1a1b1c;transition:background .2s ease, background-color .3s ease, transform .4s ease;animation:connectSlide .4s cubic-bezier(.22,1,.36,1) backwards;}
+        .connect-item.followed{background:rgba(167,139,250,0.04)}
+        .connect-item img{width:44px;height:44px;border-radius:50%;object-fit:cover;border:none;flex-shrink:0}
+        .connect-info{flex:1;min-width:0;padding-left:2px}
+        .connect-name{font-size:14.5px;font-weight:600;color:var(--text-1);line-height:1.3}
+        .connect-handle{font-size:12px;color:var(--text-3);margin-top:1px;line-height:1.2}
+        .connect-btn{flex-shrink:0;min-width:100px;padding:7px 0;border-radius:20px;border:1.5px solid var(--text-1);font-size:13px;font-weight:700;cursor:pointer;transition:transform .15s ease, background .2s ease, border-color .2s ease, color .2s ease;background:transparent;color:var(--text-1)}
+        .connect-btn:active{transform:scale(.95)}
+        .connect-btn.done{border-color:var(--accent);color:var(--accent);background:var(--accent-soft)}
+        .connect-btn.fb{border:none;background:linear-gradient(135deg,var(--accent-2),#7c3aed);color:#fff}
+        .connect-btn.friends{border:1.5px solid #22c55e;color:#22c55e;background:rgba(34,197,94,0.08)}
+        
+        /* ── SMOOTH ITEM TRANSITION ── */
+        .connect-item{display:flex;align-items:center;gap:12px;padding:10px 16px;background:var(--bg-2);border:none;overflow:hidden;transition:opacity .35s ease, transform .35s ease, max-height .35s ease .05s, padding .35s ease .05s, border-color .35s ease}
+        .connect-item.completed{background:rgba(34,197,94,0.06)}
+        .connect-item.exiting{opacity:0;transform:translateX(-25px);max-height:0 !important;padding-top:0;padding-bottom:0;border-color:transparent}
+
+        /* ── CONNECT FLOATING PILLS ── */
+        .connect-pills{display:flex;gap:8px;padding:0 16px 20px}
+        .connect-pill{padding:7px 14px;border-radius:20px;background:var(--surface);border:1px solid var(--border);font-size:12px;font-weight:600;color:var(--text-2);cursor:pointer;transition:all .2s ease;display:flex;align-items:center;gap:5px}
+        .connect-pill:active{transform:scale(.97);opacity:.8}
+        .connect-pill svg{width:14px;height:14px;stroke:currentColor;stroke-width:2;fill:none}
+        .connect-pill .pill-badge{min-width:16px;height:16px;padding:0 4px;border-radius:8px;background:var(--accent-2);color:#fff;font-size:9px;font-weight:700;display:flex;align-items:center;justify-content:center}
+        
+        /* ── CONNECT SUB-PAGES ── */
+        .connect-subpage{position:fixed;top:0;left:0;right:0;bottom:0;max-width:430px;margin:0 auto;background:var(--bg-2);z-index:200;transform:translateX(100%);transition:transform .3s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column}
+        .connect-subpage.open{transform:translateX(0)}
+        .connect-subpage-hdr{flex-shrink:0;display:flex;align-items:center;gap:10px;padding:14px 16px;background:var(--bg-2);border-bottom:1px solid rgba(255,255,255,.05);position:relative;z-index:1}
+        .connect-subpage-back{width:40px;height:40px;border-radius:50%;background:transparent;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .18s ease;margin-left:-8px}
+        .connect-subpage-back:active{transform:scale(.92);background:rgba(255,255,255,.06)}
+        .connect-subpage-back svg{width:26px;height:26px;stroke:var(--text-1);stroke-width:2.8;fill:none;stroke-linecap:round;stroke-linejoin:round}
+        .connect-subpage-title{font-size:18px;font-weight:800;color:var(--text-1)}
+        .connect-subpage-content{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;padding:0 0 calc(58px + var(--safe-b));position:relative;will-change:transform;background:var(--bg-2)}
+        .connect-subpage-content.shifting{transition:transform .3s cubic-bezier(.4,0,.2,1)}
+        .connect-subpage-content.releasing{transition:transform .4s cubic-bezier(.22,1,.36,1)}
+        .sp-list{padding:0;margin:0;background:var(--bg-2)}
+        .sp-item{display:flex;align-items:center;gap:12px;padding:11px 16px;background:var(--bg-2);border:none;margin:0;border-bottom:1px solid rgba(255,255,255,.04)}
+        .sp-item img{width:44px;height:44px;border-radius:50%;object-fit:cover;flex-shrink:0}
+        .sp-info{flex:1;min-width:0}
+        .sp-name{font-size:14.5px;font-weight:600;color:var(--text-1);line-height:1.3}
+        .sp-sub{font-size:12px;color:var(--text-3);margin-top:1px}
+        .sp-item.friend-item{transition:opacity .4s ease,transform .4s ease,max-height .4s ease .05s,padding .4s ease .05s}
+        .sp-item.removing{opacity:0;transform:translateX(-30px) scale(.96);max-height:0 !important;padding-top:0 !important;padding-bottom:0 !important;overflow:hidden}
+        .sp-item.completed{background:rgba(34,197,94,.04)}
+        .sp-item.exiting{opacity:0;transform:translateX(-25px);max-height:0 !important;padding-top:0;padding-bottom:0;overflow:hidden}
+        
+        /* ── OLD TAB STYLES (keep for compatibility) ── */
+        .connect-tab-panel{display:none}
+        .connect-tab-panel.on{display:block}
+        .connect-empty{padding:40px 16px;text-align:center}
+        .connect-empty-title{font-size:15px;font-weight:700;color:var(--text-1)}
+        .connect-empty-sub{font-size:13px;color:var(--text-3);margin-top:4px}
+
+        /* ── FRIENDS SUBPAGE ── */
+        .friends-count{font-size:13px;font-weight:600;color:var(--text-3);margin-left:auto}
+        .unfriend-btn{border:1.5px solid #ef4444 !important;color:#ef4444 !important;background:rgba(239,68,68,0.06) !important;font-size:12px !important;min-width:88px !important;padding:6px 0 !important;border-radius:18px !important;transition:transform .15s ease, opacity .15s ease !important}
+        .unfriend-btn:active{transform:scale(.95) !important;opacity:.7 !important}
+        .friend-item{transition:opacity .4s cubic-bezier(.4,0,.2,1), transform .4s cubic-bezier(.4,0,.2,1), max-height .4s cubic-bezier(.4,0,.2,1) .05s, padding .4s cubic-bezier(.4,0,.2,1) .05s, margin .4s cubic-bezier(.4,0,.2,1) .05s}
+        .friend-item.removing{opacity:0;transform:translateX(-30px) scale(.96);max-height:0 !important;padding-top:0 !important;padding-bottom:0 !important;margin-bottom:0 !important;overflow:hidden}
+        .connect-empty-icon{font-size:40px;margin-bottom:8px}
+
+        /* ── UNFRIEND POPUP ── */
+        .uf-overlay{position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0);display:flex;align-items:flex-end;justify-content:center;pointer-events:none;transition:background .3s cubic-bezier(.4,0,.2,1);max-width:430px;margin:0 auto}
+        .uf-overlay.show{background:rgba(0,0,0,.55);pointer-events:auto}
+        .uf-popup{width:100%;max-width:400px;margin:0 10px 0;background:#2d2e30;border-radius:20px 20px 0 0;padding:20px 20px calc(20px + var(--safe-b));transform:translateY(100%);transition:transform .35s cubic-bezier(.22,1,.36,1);will-change:transform}
+        .uf-overlay.show .uf-popup{transform:translateY(0)}
+        .uf-popup-avatar{width:52px;height:52px;border-radius:50%;margin:0 auto 12px;overflow:hidden;border:2.5px solid rgba(239,68,68,.3);box-shadow:0 4px 16px rgba(0,0,0,.3)}
+        .uf-popup-avatar img{width:100%;height:100%;object-fit:cover;display:block}
+        .uf-popup-title{font-size:16px;font-weight:800;color:var(--text-1);text-align:center;margin-bottom:14px;line-height:1.3}
+        .uf-popup-title span{color:#ef4444}
+        .uf-popup-details{padding:12px 14px;background:rgba(255,255,255,.03);border-radius:12px;margin-bottom:18px;display:flex;flex-direction:column;gap:10px;border:1px solid rgba(255,255,255,.05)}
+        .uf-detail-item{display:flex;align-items:flex-start;gap:10px;font-size:12.5px;color:var(--text-2);line-height:1.5}
+        .uf-detail-item svg{width:16px;height:16px;flex-shrink:0;margin-top:1px;stroke:var(--text-3);stroke-width:2;fill:none;stroke-linecap:round;stroke-linejoin:round}
+        .uf-popup-actions{display:flex;gap:10px}
+        .uf-btn-cancel{flex:1;padding:12px 0;border-radius:14px;border:none;background:rgba(255,255,255,.08);color:var(--text-1);font-size:14px;font-weight:700;cursor:pointer;transition:transform .15s ease, background .15s ease}
+        .uf-btn-cancel:active{transform:scale(.97);background:rgba(255,255,255,.12)}
+        .uf-btn-confirm{flex:1;padding:12px 0;border-radius:14px;border:none;background:#ef4444;color:#fff;font-size:14px;font-weight:700;cursor:pointer;transition:transform .15s ease, opacity .15s ease}
+        .uf-btn-confirm:active{transform:scale(.97);opacity:.85}
+
+        /* ── PULL TO REFRESH ── */
+        .ptr-indicator{position:absolute;left:50%;top:-38px;z-index:50;pointer-events:none;opacity:0;will-change:transform}
+        .ptr-indicator.snapping{transition:transform .3s cubic-bezier(.4,0,.2,1),opacity .2s ease}
+        .ptr-indicator.releasing{transition:transform .35s cubic-bezier(.22,1,.36,1),opacity .25s ease .05s}
+        .ptr-bubble{width:36px;height:36px;border-radius:50%;overflow:hidden;box-shadow:0 1px 5px rgba(0,0,0,.45)}
+        .ptr-svg{width:100%;height:100%;display:block}
+        .ptr-indicator.refreshing .ptr-svg{animation:ptrSpin 1.2s linear infinite !important}
+        @keyframes ptrSpin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+
+
+        /* ── REELS SECTION ── */
+        .reels-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;padding:8px 10px}
+        .reel-card{position:relative;border-radius:14px;overflow:hidden;background:var(--bg-2);cursor:pointer;transition:transform .2s ease;animation:reelPop .45s cubic-bezier(.22,1,.36,1) backwards;}
+        .reel-card:nth-child(1){animation-delay:.02s}.reel-card:nth-child(2){animation-delay:.06s}.reel-card:nth-child(3){animation-delay:.10s}.reel-card:nth-child(4){animation-delay:.14s}.reel-card:nth-child(5){animation-delay:.18s}.reel-card:nth-child(6){animation-delay:.22s}
+        @keyframes reelPop{from{opacity:0;transform:scale(.94)}to{opacity:1;transform:scale(1)}}
+        .reel-card:active{transform:scale(.96)}
+        .reel-card img{width:100%;aspect-ratio:9/16;object-fit:cover;display:block}
+        .reel-overlay{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end;background:linear-gradient(to top,rgba(0,0,0,.75) 0%,transparent 50%);padding:10px;}
+        .reel-play{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.15);backdrop-filter:blur(8px);border:1.5px solid rgba(255,255,255,.3);display:flex;align-items:center;justify-content:center;}
+        .reel-play svg{width:16px;height:16px;fill:#fff;margin-left:2px}
+        .reel-views{font-size:10px;font-weight:600;color:rgba(255,255,255,.9);display:flex;align-items:center;gap:3px}
+        .reel-views svg{width:10px;height:10px;stroke:#fff;stroke-width:2.5;fill:none}
+        .reel-creator{display:flex;align-items:center;gap:5px;margin-top:5px}
+        .reel-creator img{width:18px;height:18px;border-radius:50%;object-fit:cover;border:1.5px solid rgba(255,255,255,.5)}
+        .reel-creator span{font-size:10px;font-weight:600;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.5)}
+
+        /* ── NOTIFICATIONS SECTION ── */
+        .notif-hdr{padding:18px 16px 4px;display:flex;align-items:center;justify-content:space-between}
+        .notif-hdr h3{font-size:17px;font-weight:800;letter-spacing:-.3px}
+        .notif-hdr span{font-size:12px;color:var(--accent);font-weight:600;cursor:pointer}
+        .notif-sec{padding:12px 16px 4px;font-size:10px;font-weight:700;color:var(--text-3);letter-spacing:.6px;text-transform:uppercase}
+        .notif-list{padding:0 8px}
+        .notif-item{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:14px;cursor:pointer;position:relative;transition:background .2s;animation:notifSlide .35s cubic-bezier(.22,1,.36,1) backwards;}
+        .notif-item:nth-child(1){animation-delay:.01s}.notif-item:nth-child(2){animation-delay:.03s}.notif-item:nth-child(3){animation-delay:.05s}.notif-item:nth-child(4){animation-delay:.07s}.notif-item:nth-child(5){animation-delay:.09s}.notif-item:nth-child(6){animation-delay:.11s}
+        @keyframes notifSlide{from{opacity:0;transform:translateX(-8px)}to{opacity:1;transform:translateX(0)}}
+        .notif-item:active{background:var(--surface)}
+        .notif-item.unread{background:rgba(139,92,246,.04)}
+        .notif-av{position:relative;flex-shrink:0}
+        .notif-av img{width:44px;height:44px;border-radius:50%;object-fit:cover}
+        .notif-av-icon{position:absolute;bottom:-2px;right:-2px;width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;border:2px solid var(--bg);}
+        .notif-av-icon.like{background:#ef4444}
+        .notif-av-icon.follow{background:var(--accent-2)}
+        .notif-av-icon.comment{background:#22c55e}
+        .notif-av-icon.mention{background:#3b82f6}
+        .notif-av-icon.room{background:#f59e0b}
+        .notif-av-icon svg{width:10px;height:10px;stroke:#fff;stroke-width:2.5;fill:none}
+        .notif-av-icon.like svg{fill:#fff;stroke:none}
+        .notif-body{flex:1;min-width:0}
+        .notif-text{font-size:13px;color:var(--text-2);line-height:1.4}
+        .notif-text strong{color:var(--text-1);font-weight:700}
+        .notif-time{font-size:11px;color:var(--text-3);margin-top:2px}
+        .notif-thumb{width:40px;height:40px;border-radius:8px;object-fit:cover;flex-shrink:0}
+        .notif-dot{position:absolute;left:6px;top:50%;transform:translateY(-50%);width:6px;height:6px;border-radius:50%;background:var(--accent)}
+
+        /* ── BOTTOM NAV ── */
+        .bnav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;z-index:100;background:#242526;border-top:1px solid #4e4f50;box-shadow:0 -2px 12px rgba(0,0,0,.6);padding:6px 0 calc(6px + var(--safe-b));display:flex;justify-content:space-around;align-items:stretch;}
+        .nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0;padding:8px 0;border-radius:0;cursor:pointer;position:relative;user-select:none;transition:all .18s ease;text-decoration:none;}
+        .nav-btn:active{background:rgba(255,255,255,.04)}
+        .nav-btn svg{width:26px;height:26px;stroke-width:2;transition:all .2s}
+        .nav-btn span{display:none}
+        .nav-btn:not(.on) svg{stroke:var(--text-3)}
+        .nav-btn.on svg{stroke:var(--accent)}
+        .nav-btn.on::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:36px;height:3px;background:var(--accent);border-radius:0 0 3px 3px;}
+        .nav-badge{position:absolute;top:4px;right:calc(50% - 22px);min-width:18px;height:18px;padding:0 5px;border-radius:9px;background:var(--red);color:#fff;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;border:2px solid #242526}
+
+        /* ── RIPPLE ── */
+        .ripple{position:absolute;border-radius:50%;background:rgba(139,92,246,.12);transform:scale(0);animation:rip .5s ease-out;pointer-events:none;z-index:10}
+        @keyframes rip{to{transform:scale(4);opacity:0}}
+    </style>
+</head>
+<body>
+
+<div class="page" id="homePage">
+    <div class="h-top-bar">
+        <header class="h-hdr">
+            <div class="h-hdr-row">
+                <div class="h-hdr-left">
+                    <span class="h-hdr-title">ChainX</span>
+                </div>
+                <div class="h-hdr-actions">
+                    <div class="h-hdr-btn" onclick="ripple(event,this)">
+                        <svg viewBox="0 0 24 24"><path d="M3 10a7 7 0 1 0 14 0a7 7 0 1 0 -14 0"/><path d="M21 21l-6 -6"/></svg>
+                    </div>
+                    <div class="h-hdr-btn" onclick="ripple(event,this)">
+                        <svg viewBox="0 0 24 24"><path d="M3 4h18"/><path d="M3 12h18"/><path d="M3 20h18"/></svg>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <nav class="h-sections">
+            <div class="h-sec-tab on" onclick="swSection('all',this)" data-section="all">
+                <svg class="ico-out" viewBox="0 0 24 24"><rect width="7" height="7" x="3" y="3" rx="1.5"/><rect width="7" height="7" x="14" y="3" rx="1.5"/><rect width="7" height="7" x="14" y="14" rx="1.5"/><rect width="7" height="7" x="3" y="14" rx="1.5"/></svg>
+                <svg class="ico-fill" viewBox="0 0 24 24"><rect width="7" height="7" x="3" y="3" rx="1.5" fill="currentColor" stroke="none"/><rect width="7" height="7" x="14" y="3" rx="1.5" fill="currentColor" stroke="none"/><rect width="7" height="7" x="14" y="14" rx="1.5" fill="currentColor" stroke="none"/><rect width="7" height="7" x="3" y="14" rx="1.5" fill="currentColor" stroke="none"/></svg>
+            </div>
+            <div class="h-sec-tab" onclick="swSection('connect',this)" data-section="connect">
+                <svg class="ico-out" viewBox="0 0 24 24"><path d="M2 21a8 8 0 0 1 13.292-6"/><circle cx="10" cy="8" r="5"/><path d="M19 16v6"/><path d="M22 19h-6"/></svg>
+                <svg class="ico-fill" viewBox="0 0 24 24"><circle cx="10" cy="8" r="5" fill="currentColor" stroke="none"/><path d="M2 21a8 8 0 0 1 13.292-6" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><path d="M19 16v6" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><path d="M22 19h-6" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>
+            </div>
+            <div class="h-sec-tab" onclick="swSection('reels',this)" data-section="reels">
+                <svg class="ico-out" viewBox="0 0 24 24"><path d="M20.2 6 3 11l-.9-2.4c-.3-1.1.3-2.2 1.3-2.5l13.5-4c1.1-.3 2.2.3 2.5 1.3Z"/><path d="m6.2 5.3 3.1 3.9"/><path d="m12.4 3.4 3.1 4"/><path d="M3 11h18v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"/></svg>
+                <svg class="ico-fill" viewBox="0 0 24 24"><path d="M20.2 6 3 11l-.9-2.4c-.3-1.1.3-2.2 1.3-2.5l13.5-4c1.1-.3 2.2.3 2.5 1.3Z" fill="currentColor" stroke="none"/><path d="M3 11h18v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z" fill="currentColor" stroke="none"/><path d="m6.2 5.3 3.1 3.9" fill="none" stroke="#242526" stroke-width="2" stroke-linecap="round"/><path d="m12.4 3.4 3.1 4" fill="none" stroke="#242526" stroke-width="2" stroke-linecap="round"/></svg>
+            </div>
+            <div class="h-sec-tab" onclick="swSection('notif',this)" data-section="notif">
+                <svg class="ico-out" viewBox="0 0 24 24"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+                <svg class="ico-fill" viewBox="0 0 24 24"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9Z" fill="currentColor" stroke="none"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                <span class="h-sec-badge">9</span>
+            </div>
+        </nav>
+    </div>
+
+    <!-- ALL / FEED PANEL -->
+    <div class="h-sec-panel on" id="panelAll">
+        <div class="h-scenes-wrap">
+        <div class="h-scenes" id="scenesRow">
+            <div class="h-scene" onclick="feedAI.track('story','click')">
+                <div class="h-scene-card add">
+                    <div class="h-scene-add-content">
+                        <div class="h-scene-add-icon"><svg viewBox="0 0 24 24"><path d="M12 5v14"/><path d="M5 12h14"/></svg></div>
+                        <span class="h-scene-add-text">Add Scene</span>
+                    </div>
+                </div>
+            </div>
+            <div class="h-scene" onclick="feedAI.track('story','click')">
+                <div class="h-scene-card live">
+                    <div class="h-scene-thumb"><img src="https://images.unsplash.com/photo-1524758631624-e2822e304c36?w=200&h=320&fit=crop&q=80" alt=""></div>
+                    <div class="h-scene-user"><img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=60&h=60&fit=crop&crop=face&q=80" alt=""><span class="h-scene-user-name">Sarah</span></div>
+                    <div class="h-scene-live-badge">LIVE</div>
+                </div>
+            </div>
+            <div class="h-scene" onclick="feedAI.track('story','click')">
+                <div class="h-scene-card">
+                    <div class="h-scene-thumb"><img src="https://images.unsplash.com/photo-1511379938547-c1f69419868d?w=200&h=320&fit=crop&q=80" alt=""></div>
+                    <div class="h-scene-user"><img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=60&h=60&fit=crop&crop=face&q=80" alt=""><span class="h-scene-user-name">Alex</span></div>
+                    <div class="h-scene-views"><svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>2.1K</div>
+                </div>
+            </div>
+            <div class="h-scene" onclick="feedAI.track('story','click')">
+                <div class="h-scene-card seen">
+                    <div class="h-scene-thumb"><img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=200&h=320&fit=crop&q=80" alt=""></div>
+                    <div class="h-scene-user"><img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=60&h=60&fit=crop&crop=face&q=80" alt=""><span class="h-scene-user-name">Emma</span></div>
+                    <div class="h-scene-views"><svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>856</div>
+                </div>
+            </div>
+            <div class="h-scene" onclick="feedAI.track('story','click')">
+                <div class="h-scene-card">
+                    <div class="h-scene-thumb"><img src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=200&h=320&fit=crop&q=80" alt=""></div>
+                    <div class="h-scene-user"><img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=60&h=60&fit=crop&crop=face&q=80" alt=""><span class="h-scene-user-name">Marcus</span></div>
+                    <div class="h-scene-views"><svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>4.3K</div>
+                </div>
+            </div>
+            <div class="h-scene" onclick="feedAI.track('story','click')">
+                <div class="h-scene-card">
+                    <div class="h-scene-thumb"><img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=200&h=320&fit=crop&q=80" alt=""></div>
+                    <div class="h-scene-user"><img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=60&h=60&fit=crop&crop=face&q=80" alt=""><span class="h-scene-user-name">Priya</span></div>
+                    <div class="h-scene-views"><svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>1.2K</div>
+                </div>
+            </div>
+            <div class="h-scene" onclick="feedAI.track('story','click')">
+                <div class="h-scene-card seen">
+                    <div class="h-scene-thumb"><img src="https://images.unsplash.com/photo-1513364776144-60967b0f800f?w=200&h=320&fit=crop&q=80" alt=""></div>
+                    <div class="h-scene-user"><img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=60&h=60&fit=crop&crop=face&q=80" alt=""><span class="h-scene-user-name">Daniel</span></div>
+                    <div class="h-scene-views"><svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>523</div>
+                </div>
+            </div>
+        </div>
+        </div><!-- end h-scenes-wrap -->
+
+        <div id="homeFeed">
+        <!-- POST 1 — Photo -->
+        <div class="h-post" data-type="photo" onclick="feedAI.trackView('photo')">
+            <div class="h-post-hdr">
+                <img class="h-post-av" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop&crop=face&q=80" alt="">
+                <div class="h-post-meta">
+                    <div class="h-post-name-row">
+                        <span class="h-post-name">Sarah Wilson</span>
+                        <span class="h-post-verified"><svg viewBox="0 0 24 24"><path d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z" fill="#a78bfa"/><path d="m9 12 2 2 4-4" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                        <span class="h-post-badge">Creator</span>
+                    </div>
+                    <div class="h-post-sub"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a14.5 14.5 0 0 0 0 20"/></svg>2h · Public</div>
+                </div>
+                <div class="h-post-more"><svg viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/></svg></div>
+            </div>
+            <div class="h-post-body">Just finished the most incredible night in Sunset Lounge room 🌅✨ The energy was unreal — 200+ people vibing together. This is what Theater is about 💜</div>
+            <img class="h-post-img" src="https://images.unsplash.com/photo-1524758631624-e2822e304c36?w=800&h=500&fit=crop&q=80" alt="" loading="lazy" style="margin-bottom:0">
+            <div class="h-post-reactions">
+                <div class="h-post-react-pile"><span>🔥</span><span>❤️</span><span>😍</span></div>
+                <span class="h-post-react-count">1.2K</span>
+                <div class="h-post-react-right"><span>84 comments</span><span>·</span><span>32 shares</span></div>
+            </div>
+            <div class="h-post-actions">
+                <div class="h-post-act" onclick="toggleLike(this);feedAI.track('photo','like')"><svg viewBox="0 0 24 24"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>Like</div>
+                <div class="h-post-act-sep"></div>
+                <div class="h-post-act" onclick="feedAI.track('photo','comment')"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Comment</div>
+                <div class="h-post-act-sep"></div>
+                <div class="h-post-act" onclick="feedAI.track('photo','share')"><svg viewBox="0 0 24 24"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>Share</div>
+            </div>
+        </div>
+
+        <!-- LIVE ROOM SUGGESTION -->
+        <div class="h-room-suggest" data-type="room">
+            <div class="h-room-suggest-label">27 people you follow are watching</div>
+            <div class="h-room-cards-row">
+                <div class="h-room-card" onclick="feedAI.track('room','click')">
+                    <div class="h-room-card-img">
+                        <img src="https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=400&h=220&fit=crop&q=80" alt="" loading="lazy">
+                        <div class="h-room-card-live"><div class="ld"></div>LIVE</div>
+                        <div class="h-room-card-watchers"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>243</div>
+                    </div>
+                    <div class="h-room-card-body">
+                        <div class="h-room-card-name">Late Night Cinema</div>
+                        <div class="h-room-card-host"><img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=40&h=40&fit=crop&crop=face&q=80" alt=""><span>Alex Martinez</span><button class="h-room-card-join">Jump In</button></div>
+                    </div>
+                </div>
+                <div class="h-room-card" onclick="feedAI.track('room','click')">
+                    <div class="h-room-card-img">
+                        <img src="https://images.unsplash.com/photo-1511379938547-c1f69419868d?w=400&h=220&fit=crop&q=80" alt="" loading="lazy">
+                        <div class="h-room-card-live"><div class="ld"></div>LIVE</div>
+                        <div class="h-room-card-watchers"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>88</div>
+                    </div>
+                    <div class="h-room-card-body">
+                        <div class="h-room-card-name">Music Studio Live</div>
+                        <div class="h-room-card-host"><img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=40&h=40&fit=crop&crop=face&q=80" alt=""><span>Marcus Reed</span><button class="h-room-card-join">Jump In</button></div>
+                    </div>
+                </div>
+                <div class="h-room-card" onclick="feedAI.track('room','click')">
+                    <div class="h-room-card-img">
+                        <img src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=400&h=220&fit=crop&q=80" alt="" loading="lazy">
+                        <div class="h-room-card-live"><div class="ld"></div>LIVE</div>
+                        <div class="h-room-card-watchers"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>512</div>
+                    </div>
+                    <div class="h-room-card-body">
+                        <div class="h-room-card-name">Game Night Live</div>
+                        <div class="h-room-card-host"><img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=40&h=40&fit=crop&crop=face&q=80" alt=""><span>Daniel Park</span><button class="h-room-card-join">Jump In</button></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- POST 2 — Text -->
+        <div class="h-post" data-type="text" onclick="feedAI.trackView('text')">
+            <div class="h-post-hdr">
+                <img class="h-post-av" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=80&h=80&fit=crop&crop=face&q=80" alt="">
+                <div class="h-post-meta">
+                    <div class="h-post-name-row"><span class="h-post-name">Marcus Reed</span><span class="h-post-badge">Gamer</span></div>
+                    <div class="h-post-sub"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a14.5 14.5 0 0 0 0 20"/></svg>1h · Public</div>
+                </div>
+                <div class="h-post-more"><svg viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/></svg></div>
+            </div>
+            <div class="h-post-body big">Bro the Game Night room just hit 500 viewers 🎮🔥 This community is something else. GG to everyone who joined!</div>
+            <div class="h-post-reactions">
+                <div class="h-post-react-pile"><span>🎮</span><span>🔥</span><span>😂</span></div>
+                <span class="h-post-react-count">847</span>
+                <div class="h-post-react-right"><span>203 comments</span></div>
+            </div>
+            <div class="h-post-actions">
+                <div class="h-post-act" onclick="toggleLike(this);feedAI.track('text','like')"><svg viewBox="0 0 24 24"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>Like</div>
+                <div class="h-post-act-sep"></div>
+                <div class="h-post-act" onclick="feedAI.track('text','comment')"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Comment</div>
+                <div class="h-post-act-sep"></div>
+                <div class="h-post-act" onclick="feedAI.track('text','share')"><svg viewBox="0 0 24 24"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>Share</div>
+            </div>
+        </div>
+
+        <!-- POST 3 — Video -->
+        <div class="h-post" data-type="video" onclick="feedAI.trackView('video')">
+            <div class="h-post-hdr">
+                <img class="h-post-av" src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=80&h=80&fit=crop&crop=face&q=80" alt="">
+                <div class="h-post-meta">
+                    <div class="h-post-name-row"><span class="h-post-name">Emma Chen</span><span class="h-post-badge">Filmmaker</span></div>
+                    <div class="h-post-sub"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a14.5 14.5 0 0 0 0 20"/></svg>3h · Public</div>
+                </div>
+                <div class="h-post-more"><svg viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/></svg></div>
+            </div>
+            <div class="h-post-body">Behind the scenes of our Nature Escape room session 🏔️ This is why I love this app — real moments, real people.</div>
+            <div class="h-post-video" onclick="feedAI.track('video','click')">
+                <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=450&fit=crop&q=80" alt="" loading="lazy">
+                <div class="h-post-video-play"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
+                <div class="h-post-video-meta">
+                    <span class="h-post-video-dur">2:34</span>
+                    <span class="h-post-video-views"><svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>14.2K views</span>
+                </div>
+            </div>
+            <div class="h-post-reactions">
+                <div class="h-post-react-pile"><span>❤️</span><span>😍</span><span>🌿</span></div>
+                <span class="h-post-react-count">2.8K</span>
+                <div class="h-post-react-right"><span>156 comments</span></div>
+            </div>
+            <div class="h-post-actions">
+                <div class="h-post-act" onclick="toggleLike(this);feedAI.track('video','like')"><svg viewBox="0 0 24 24"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>Like</div>
+                <div class="h-post-act-sep"></div>
+                <div class="h-post-act" onclick="feedAI.track('video','comment')"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Comment</div>
+                <div class="h-post-act-sep"></div>
+                <div class="h-post-act" onclick="feedAI.track('video','share')"><svg viewBox="0 0 24 24"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>Share</div>
+            </div>
+        </div>
+
+        <!-- CHANNEL SUGGESTIONS -->
+        <div class="h-ch-suggest" data-type="channel">
+            <div class="h-ch-suggest-label">Channels to Follow<span class="h-ch-suggest-see">See All</span></div>
+            <div class="h-ch-row">
+                <div class="h-ch-card" onclick="feedAI.track('channel','click')"><img src="https://images.unsplash.com/photo-1518770660439-4636190af475?w=100&h=100&fit=crop&q=80" alt=""><div class="h-ch-card-name">Tech News</div><div class="h-ch-card-subs">12.4K subscribers</div><button class="h-ch-card-follow" onclick="toggleFollow(this)">+ Follow</button></div>
+                <div class="h-ch-card" onclick="feedAI.track('channel','click')"><img src="https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=100&h=100&fit=crop&q=80" alt=""><div class="h-ch-card-name">Movie Buffs</div><div class="h-ch-card-subs">8.7K subscribers</div><button class="h-ch-card-follow" onclick="toggleFollow(this)">+ Follow</button></div>
+                <div class="h-ch-card" onclick="feedAI.track('channel','click')"><img src="https://images.unsplash.com/photo-1511379938547-c1f69419868d?w=100&h=100&fit=crop&q=80" alt=""><div class="h-ch-card-name">Music Lovers</div><div class="h-ch-card-subs">5.2K subscribers</div><button class="h-ch-card-follow" onclick="toggleFollow(this)">+ Follow</button></div>
+                <div class="h-ch-card" onclick="feedAI.track('channel','click')"><img src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=100&h=100&fit=crop&q=80" alt=""><div class="h-ch-card-name">Gaming Hub</div><div class="h-ch-card-subs">3.1K subscribers</div><button class="h-ch-card-follow" onclick="toggleFollow(this)">+ Follow</button></div>
+                <div class="h-ch-card" onclick="feedAI.track('channel','click')"><img src="https://images.unsplash.com/photo-1513364776144-60967b0f800f?w=100&h=100&fit=crop&q=80" alt=""><div class="h-ch-card-name">Art &amp; Design</div><div class="h-ch-card-subs">2.9K subscribers</div><button class="h-ch-card-follow" onclick="toggleFollow(this)">+ Follow</button></div>
+            </div>
+        </div>
+
+        <!-- POST 4 — Reel -->
+        <div class="h-post" data-type="reel" onclick="feedAI.trackView('reel')">
+            <div class="h-post-hdr">
+                <img class="h-post-av" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&h=80&fit=crop&crop=face&q=80" alt="">
+                <div class="h-post-meta">
+                    <div class="h-post-name-row"><span class="h-post-name">Alex Martinez</span><span class="h-post-badge live-badge">● LIVE</span></div>
+                    <div class="h-post-sub"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a14.5 14.5 0 0 0 0 20"/></svg>Just now</div>
+                </div>
+                <div class="h-post-more"><svg viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/></svg></div>
+            </div>
+            <div class="h-post-reel" onclick="feedAI.track('reel','click')">
+                <img src="https://images.unsplash.com/photo-1534996858221-380b92700493?w=600&h=900&fit=crop&q=80" alt="" loading="lazy">
+                <div class="h-post-reel-overlay">
+                    <div class="h-post-reel-play"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
+                    <div class="h-post-reel-label">🎬 Reel</div>
+                    <div class="h-post-reel-title">Late Night Cinema — opening scene highlights</div>
+                </div>
+            </div>
+            <div class="h-post-reactions">
+                <div class="h-post-react-pile"><span>🎬</span><span>🔥</span><span>❤️</span></div>
+                <span class="h-post-react-count">4.1K</span>
+                <div class="h-post-react-right"><span>89 comments</span></div>
+            </div>
+            <div class="h-post-actions">
+                <div class="h-post-act" onclick="toggleLike(this);feedAI.track('reel','like')"><svg viewBox="0 0 24 24"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>Like</div>
+                <div class="h-post-act-sep"></div>
+                <div class="h-post-act" onclick="feedAI.track('reel','comment')"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Comment</div>
+                <div class="h-post-act-sep"></div>
+                <div class="h-post-act" onclick="feedAI.track('reel','share')"><svg viewBox="0 0 24 24"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>Share</div>
+            </div>
+        </div>
+
+        <!-- TRENDING TOPIC -->
+        <div class="h-trend" data-type="trend">
+            <div class="h-trend-label">✦ Trending on Theater</div>
+            <div class="h-trend-title">#LateNightCinema</div>
+            <div class="h-trend-meta"><span>14.8K posts</span><span>·</span><span>Trending now</span></div>
+        </div>
+
+        <!-- POST 5 — Photo grid -->
+        <div class="h-post" data-type="photo" onclick="feedAI.trackView('photo')">
+            <div class="h-post-hdr">
+                <img class="h-post-av" src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=80&h=80&fit=crop&crop=face&q=80" alt="">
+                <div class="h-post-meta">
+                    <div class="h-post-name-row"><span class="h-post-name">Priya Kumar</span><span class="h-post-badge">Educator</span></div>
+                    <div class="h-post-sub"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a14.5 14.5 0 0 0 0 20"/></svg>5h</div>
+                </div>
+                <div class="h-post-more"><svg viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/></svg></div>
+            </div>
+            <div class="h-post-body">Study Circle hit a milestone — 100 sessions completed 🎓✨ So proud of this community. DM me to join our next focus session!</div>
+            <div class="h-post-img-grid two">
+                <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=400&h=320&fit=crop&q=80" alt="" loading="lazy">
+                <img src="https://images.unsplash.com/photo-1513364776144-60967b0f800f?w=400&h=320&fit=crop&q=80" alt="" loading="lazy">
+            </div>
+            <div class="h-post-reactions">
+                <div class="h-post-react-pile"><span>🎓</span><span>❤️</span><span>👏</span></div>
+                <span class="h-post-react-count">931</span>
+                <div class="h-post-react-right"><span>47 comments</span></div>
+            </div>
+            <div class="h-post-actions">
+                <div class="h-post-act" onclick="toggleLike(this);feedAI.track('photo','like')"><svg viewBox="0 0 24 24"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>Like</div>
+                <div class="h-post-act-sep"></div>
+                <div class="h-post-act" onclick="feedAI.track('photo','comment')"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Comment</div>
+                <div class="h-post-act-sep"></div>
+                <div class="h-post-act" onclick="feedAI.track('photo','share')"><svg viewBox="0 0 24 24"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>Share</div>
+            </div>
+        </div>
+
+        <!-- SPONSORED AD -->
+        <div class="h-ad-banner" onclick="feedAI.track('ad','click')">
+            <img class="h-ad-img" src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=200&h=200&fit=crop&q=80" alt="" loading="lazy">
+            <div class="h-ad-body">
+                <div class="h-ad-label">Sponsored · Gaming</div>
+                <div class="h-ad-title">Razer Kraken V4 — Ultimate Gaming Headset</div>
+                <div class="h-ad-desc">Crystal-clear audio for your theater sessions</div>
+                <div class="h-ad-cta">Shop Now <svg viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></div>
+            </div>
+        </div>
+
+        <!-- PEOPLE YOU MAY KNOW -->
+        <div class="h-people-row" data-type="people">
+            <div class="h-people-label">People You May Know</div>
+            <div class="h-people-scroll">
+                <div class="h-person" onclick="feedAI.track('people','click')"><img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=80&h=80&fit=crop&crop=face&q=80" alt=""><div class="h-person-name">Daniel Park</div><div class="h-person-mutual">3 mutual</div><button class="h-person-add">+ Follow</button></div>
+                <div class="h-person" onclick="feedAI.track('people','click')"><img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=80&h=80&fit=crop&crop=face&q=80" alt=""><div class="h-person-name">Zara Ahmed</div><div class="h-person-mutual">7 mutual</div><button class="h-person-add">+ Follow</button></div>
+                <div class="h-person" onclick="feedAI.track('people','click')"><img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=80&h=80&fit=crop&crop=face&q=80" alt=""><div class="h-person-name">James Liu</div><div class="h-person-mutual">2 mutual</div><button class="h-person-add">+ Follow</button></div>
+                <div class="h-person" onclick="feedAI.track('people','click')"><img src="https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=80&h=80&fit=crop&crop=face&q=80" alt=""><div class="h-person-name">Nina Torres</div><div class="h-person-mutual">5 mutual</div><button class="h-person-add">+ Follow</button></div>
+                <div class="h-person" onclick="feedAI.track('people','click')"><img src="https://images.unsplash.com/photo-1552058544-f2b08422138a?w=80&h=80&fit=crop&crop=face&q=80" alt=""><div class="h-person-name">Omar Malik</div><div class="h-person-mutual">1 mutual</div><button class="h-person-add">+ Follow</button></div>
+            </div>
+        </div>
+
+        <!-- THEATER AI SUGGEST -->
+        <div class="h-ai-suggest" id="aiSuggestBox">
+            <div class="h-ai-label"><svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Theater thinks you'll love</div>
+            <div class="h-ai-chips" id="aiChips">
+                <span class="h-ai-chip">🎬 Cinema Rooms</span>
+                <span class="h-ai-chip">🎵 Music Sessions</span>
+                <span class="h-ai-chip">🎮 Gaming Night</span>
+                <span class="h-ai-chip">📚 Study Groups</span>
+            </div>
+        </div>
+
+        <!-- POST 6 — Text link preview -->
+        <div class="h-post" data-type="text" onclick="feedAI.trackView('text')">
+            <div class="h-post-hdr">
+                <img class="h-post-av" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=80&h=80&fit=crop&crop=face&q=80" alt="">
+                <div class="h-post-meta">
+                    <div class="h-post-name-row"><span class="h-post-name">Marcus Reed</span></div>
+                    <div class="h-post-sub"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a14.5 14.5 0 0 0 0 20"/></svg>8h</div>
+                </div>
+                <div class="h-post-more"><svg viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/></svg></div>
+            </div>
+            <div class="h-post-body">This article on the future of social watching is 🤯 We're literally building this on Theater right now. The timing couldn't be better.</div>
+            <div class="h-post-link">
+                <img class="h-post-link-img" src="https://images.unsplash.com/photo-1518770660439-4636190af475?w=800&h=240&fit=crop&q=80" alt="" loading="lazy">
+                <div class="h-post-link-meta">
+                    <div class="h-post-link-src">techcrunch.com</div>
+                    <div class="h-post-link-title">The Rise of Social Viewing: How Gen Z is Redefining Watch Parties</div>
+                </div>
+            </div>
+            <div class="h-post-reactions">
+                <div class="h-post-react-pile"><span>🤯</span><span>❤️</span></div>
+                <span class="h-post-react-count">512</span>
+                <div class="h-post-react-right"><span>67 comments</span></div>
+            </div>
+            <div class="h-post-actions">
+                <div class="h-post-act" onclick="toggleLike(this);feedAI.track('text','like')"><svg viewBox="0 0 24 24"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>Like</div>
+                <div class="h-post-act-sep"></div>
+                <div class="h-post-act" onclick="feedAI.track('text','comment')"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Comment</div>
+                <div class="h-post-act-sep"></div>
+                <div class="h-post-act" onclick="feedAI.track('text','share')"><svg viewBox="0 0 24 24"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>Share</div>
+            </div>
+        </div>
+
+        <!-- SECOND ROOM SUGGESTION -->
+        <div class="h-room-suggest" data-type="room">
+            <div class="h-room-suggest-label">Suggested Rooms for You</div>
+            <div class="h-room-cards-row">
+                <div class="h-room-card" onclick="feedAI.track('room','click')">
+                    <div class="h-room-card-img"><img src="https://images.unsplash.com/photo-1513364776144-60967b0f800f?w=400&h=220&fit=crop&q=80" alt="" loading="lazy"><div class="h-room-card-watchers"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>18</div></div>
+                    <div class="h-room-card-body"><div class="h-room-card-name">Art Gallery Night</div><div class="h-room-card-host"><img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=40&h=40&fit=crop&crop=face&q=80" alt=""><span>Daniel Park</span><button class="h-room-card-join">Join</button></div></div>
+                </div>
+                <div class="h-room-card" onclick="feedAI.track('room','click')">
+                    <div class="h-room-card-img"><img src="https://images.unsplash.com/photo-1524758631624-e2822e304c36?w=400&h=220&fit=crop&q=80" alt="" loading="lazy"><div class="h-room-card-watchers"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>42</div></div>
+                    <div class="h-room-card-body"><div class="h-room-card-name">Sunset Lounge</div><div class="h-room-card-host"><img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=40&h=40&fit=crop&crop=face&q=80" alt=""><span>Sarah Wilson</span><button class="h-room-card-join">Join</button></div></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- POST 7 — Text -->
+        <div class="h-post" data-type="text" onclick="feedAI.trackView('text')">
+            <div class="h-post-hdr">
+                <img class="h-post-av" src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=80&h=80&fit=crop&crop=face&q=80" alt="">
+                <div class="h-post-meta">
+                    <div class="h-post-name-row"><span class="h-post-name">Daniel Park</span></div>
+                    <div class="h-post-sub"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a14.5 14.5 0 0 0 0 20"/></svg>12h</div>
+                </div>
+                <div class="h-post-more"><svg viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/></svg></div>
+            </div>
+            <div class="h-post-body">Art Gallery room is open tonight 🎨 Come share your work, get feedback, or just vibe with other creatives. No judgement zone 💙</div>
+            <div class="h-post-reactions">
+                <div class="h-post-react-pile"><span>🎨</span><span>💙</span><span>✨</span></div>
+                <span class="h-post-react-count">289</span>
+                <div class="h-post-react-right"><span>41 comments</span></div>
+            </div>
+            <div class="h-post-actions">
+                <div class="h-post-act" onclick="toggleLike(this);feedAI.track('text','like')"><svg viewBox="0 0 24 24"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>Like</div>
+                <div class="h-post-act-sep"></div>
+                <div class="h-post-act" onclick="feedAI.track('text','comment')"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Comment</div>
+                <div class="h-post-act-sep"></div>
+                <div class="h-post-act" onclick="feedAI.track('text','share')"><svg viewBox="0 0 24 24"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>Share</div>
+            </div>
+        </div>
+        <div style="height:12px"></div>
+        </div><!-- end #homeFeed -->
+    </div><!-- end panelAll -->
+
+    <!-- CONNECT PANEL -->
+    <div class="h-sec-panel" id="panelConnect">
+        <div class="connect-hdr"><h3>Connect</h3></div>
+        
+        <!-- Floating Pills -->
+        <div class="connect-pills">
+            <div class="connect-pill" onclick="openConnectSubpage('suggestions')">
+                <svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                Suggestions
+            </div>
+            <div class="connect-pill" onclick="openConnectSubpage('friends')">
+                <svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                Your Friends
+                <span class="pill-badge" id="friendsPillBadge">12</span>
+            </div>
+        </div>
+
+        <!-- MAIN CONNECT CONTENT (Default View) -->
+        <div id="connectMainContent">
+            
+            <!-- FOLLOWED YOU SECTION (Top) -->
+            <div class="connect-section-hdr">
+                <span class="connect-section-title">Followed you(<span id="followedYouCount">20</span>)</span>
+                <span class="connect-section-see-all" onclick="openConnectSubpage('followback')">See All</span>
+            </div>
+            <div class="connect-list" id="followedYouPreview">
+                    <div class="connect-item">
+                        <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop&crop=face&q=80" alt="">
+                        <div class="connect-info">
+                            <div class="connect-name">Emma Chen</div>
+                            <div class="connect-handle">2h ago</div>
+                        </div>
+                        <button class="connect-btn fb" onclick="followBack(this)">Follow Back</button>
+                    </div>
+                    <div class="connect-item">
+                        <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop&crop=face&q=80" alt="">
+                        <div class="connect-info">
+                            <div class="connect-name">Marcus Reed</div>
+                            <div class="connect-handle">5h ago</div>
+                        </div>
+                        <button class="connect-btn fb" onclick="followBack(this)">Follow Back</button>
+                    </div>
+                    <div class="connect-item">
+                        <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=100&h=100&fit=crop&crop=face&q=80" alt="">
+                        <div class="connect-info">
+                            <div class="connect-name">Priya Kumar</div>
+                            <div class="connect-handle">1d ago</div>
+                        </div>
+                        <button class="connect-btn fb" onclick="followBack(this)">Follow Back</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- PEOPLE YOU MAY KNOW SECTION (Below) -->
+            <div class="connect-section-divider"></div>
+            <div class="connect-section-hdr">
+                <span class="connect-section-title">People you may know</span>
+            </div>
+            <div class="connect-list">
+                <div class="connect-item">
+                    <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&h=100&fit=crop&crop=face&q=80" alt="">
+                    <div class="connect-info">
+                        <div class="connect-name">Zara Ahmed</div>
+                        <div class="connect-handle">7 mutual friends</div>
+                    </div>
+                    <button class="connect-btn" onclick="toggleConnect(this)">Follow</button>
+                </div>
+                <div class="connect-item">
+                    <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&h=100&fit=crop&crop=face&q=80" alt="">
+                    <div class="connect-info">
+                        <div class="connect-name">James Liu</div>
+                        <div class="connect-handle">2 mutual friends</div>
+                    </div>
+                    <button class="connect-btn" onclick="toggleConnect(this)">Follow</button>
+                </div>
+                <div class="connect-item">
+                    <img src="https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=100&h=100&fit=crop&crop=face&q=80" alt="">
+                    <div class="connect-info">
+                        <div class="connect-name">Nina Torres</div>
+                        <div class="connect-handle">5 mutual friends</div>
+                    </div>
+                    <button class="connect-btn" onclick="toggleConnect(this)">Follow</button>
+                </div>
+                <div class="connect-item">
+                    <img src="https://images.unsplash.com/photo-1552058544-f2b08422138a?w=100&h=100&fit=crop&crop=face&q=80" alt="">
+                    <div class="connect-info">
+                        <div class="connect-name">Omar Malik</div>
+                        <div class="connect-handle">1 mutual friend</div>
+                    </div>
+                    <button class="connect-btn" onclick="toggleConnect(this)">Follow</button>
+                </div>
+                <div class="connect-item">
+                    <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=100&h=100&fit=crop&crop=face&q=80" alt="">
+                    <div class="connect-info">
+                        <div class="connect-name">Daniel Park</div>
+                        <div class="connect-handle">3 mutual friends</div>
+                    </div>
+                    <button class="connect-btn" onclick="toggleConnect(this)">Follow</button>
+                </div>
+                <div class="connect-item">
+                    <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop&crop=face&q=80" alt="">
+                    <div class="connect-info">
+                        <div class="connect-name">Sarah Wilson</div>
+                        <div class="connect-handle">12 mutual friends</div>
+                    </div>
+                    <button class="connect-btn done" onclick="toggleConnect(this)">Following</button>
+                </div>
+                <div class="connect-item">
+                    <img src="https://images.unsplash.com/photo-1519345182560-3f2917c472ef?w=100&h=100&fit=crop&crop=face&q=80" alt="">
+                    <div class="connect-info">
+                        <div class="connect-name">Ryan Cooper</div>
+                        <div class="connect-handle">4 mutual friends</div>
+                    </div>
+                    <button class="connect-btn" onclick="toggleConnect(this)">Follow</button>
+                </div>
+                <div class="connect-item">
+                    <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?w=100&h=100&fit=crop&crop=face&q=80" alt="">
+                    <div class="connect-info">
+                        <div class="connect-name">Jessica Moore</div>
+                        <div class="connect-handle">6 mutual friends</div>
+                    </div>
+                    <button class="connect-btn" onclick="toggleConnect(this)">Follow</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- SUGGESTIONS SUBPAGE -->
+        <div class="connect-subpage" id="suggestionsSubpage">
+            <div class="connect-subpage-hdr">
+                <div class="connect-subpage-back" onclick="closeConnectSubpage('suggestions')"><svg viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7"/></svg></div>
+                <div class="connect-subpage-title">Suggestions</div>
+            </div>
+            <div class="connect-subpage-content" data-ptr="suggestions">
+                <div class="ptr-indicator" id="ptrSuggestions"><div class="ptr-bubble"><svg class="ptr-svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="48" fill="#F5F6F8"/><path class="ptr-path" fill="#33709D" d=""/></svg></div></div>
+                <div class="sp-list">
+                    <div class="sp-item"><img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&h=100&fit=crop&crop=face&q=80" alt=""><div class="sp-info"><div class="sp-name">Zara Ahmed</div><div class="sp-sub">7 mutual friends</div></div><button class="connect-btn" onclick="toggleConnect(this)">Follow</button></div>
+                    <div class="sp-item"><img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&h=100&fit=crop&crop=face&q=80" alt=""><div class="sp-info"><div class="sp-name">James Liu</div><div class="sp-sub">2 mutual friends</div></div><button class="connect-btn" onclick="toggleConnect(this)">Follow</button></div>
+                    <div class="sp-item"><img src="https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=100&h=100&fit=crop&crop=face&q=80" alt=""><div class="sp-info"><div class="sp-name">Nina Torres</div><div class="sp-sub">5 mutual friends</div></div><button class="connect-btn" onclick="toggleConnect(this)">Follow</button></div>
+                    <div class="sp-item"><img src="https://images.unsplash.com/photo-1552058544-f2b08422138a?w=100&h=100&fit=crop&crop=face&q=80" alt=""><div class="sp-info"><div class="sp-name">Omar Malik</div><div class="sp-sub">1 mutual friend</div></div><button class="connect-btn" onclick="toggleConnect(this)">Follow</button></div>
+                    <div class="sp-item"><img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=100&h=100&fit=crop&crop=face&q=80" alt=""><div class="sp-info"><div class="sp-name">Daniel Park</div><div class="sp-sub">3 mutual friends</div></div><button class="connect-btn" onclick="toggleConnect(this)">Follow</button></div>
+                    <div class="sp-item"><img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop&crop=face&q=80" alt=""><div class="sp-info"><div class="sp-name">Sarah Wilson</div><div class="sp-sub">12 mutual friends</div></div><button class="connect-btn" onclick="toggleConnect(this)">Follow</button></div>
+                    <div class="sp-item"><img src="https://images.unsplash.com/photo-1519345182560-3f2917c472ef?w=100&h=100&fit=crop&crop=face&q=80" alt=""><div class="sp-info"><div class="sp-name">Ryan Cooper</div><div class="sp-sub">4 mutual friends</div></div><button class="connect-btn" onclick="toggleConnect(this)">Follow</button></div>
+                    <div class="sp-item"><img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?w=100&h=100&fit=crop&crop=face&q=80" alt=""><div class="sp-info"><div class="sp-name">Jessica Moore</div><div class="sp-sub">6 mutual friends</div></div><button class="connect-btn" onclick="toggleConnect(this)">Follow</button></div>
+                    <div class="sp-item"><img src="https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=100&h=100&fit=crop&crop=face&q=80" alt=""><div class="sp-info"><div class="sp-name">Kevin Zhang</div><div class="sp-sub">3 mutual friends</div></div><button class="connect-btn" onclick="toggleConnect(this)">Follow</button></div>
+                    <div class="sp-item"><img src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=100&h=100&fit=crop&crop=face&q=80" alt=""><div class="sp-info"><div class="sp-name">Mia Johnson</div><div class="sp-sub">8 mutual friends</div></div><button class="connect-btn" onclick="toggleConnect(this)">Follow</button></div>
+                    <div class="sp-item"><img src="https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?w=100&h=100&fit=crop&crop=face&q=80" alt=""><div class="sp-info"><div class="sp-name">David Brown</div><div class="sp-sub">5 mutual friends</div></div><button class="connect-btn" onclick="toggleConnect(this)">Follow</button></div>
+                    <div class="sp-item"><img src="https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?w=100&h=100&fit=crop&crop=face&q=80" alt=""><div class="sp-info"><div class="sp-name">Sophie Adams</div><div class="sp-sub">2 mutual friends</div></div><button class="connect-btn" onclick="toggleConnect(this)">Follow</button></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- FOLLOW BACK SUBPAGE -->
+        <div class="connect-subpage" id="followbackSubpage">
+            <div class="connect-subpage-hdr">
+                <div class="connect-subpage-back" onclick="closeConnectSubpage('followback')"><svg viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7"/></svg></div>
+                <div class="connect-subpage-title">Follow Back</div>
+            </div>
+            <div class="connect-subpage-content" data-ptr="followback">
+                <div class="ptr-indicator" id="ptrFollowback"><div class="ptr-bubble"><svg class="ptr-svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="48" fill="#F5F6F8"/><path class="ptr-path" fill="#33709D" d=""/></svg></div></div>
+                <div class="sp-list" id="followBackList">
+                    <div class="sp-item"><img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop&crop=face&q=80" alt=""><div class="sp-info"><div class="sp-name">Emma Chen</div><div class="sp-sub">Followed you · 2h ago</div></div><button class="connect-btn fb" onclick="followBack(this)">Follow Back</button></div>
+                    <div class="sp-item"><img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop&crop=face&q=80" alt=""><div class="sp-info"><div class="sp-name">Marcus Reed</div><div class="sp-sub">Followed you · 5h ago</div></div><button class="connect-btn fb" onclick="followBack(this)">Follow Back</button></div>
+                    <div class="sp-item"><img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=100&h=100&fit=crop&crop=face&q=80" alt=""><div class="sp-info"><div class="sp-name">Priya Kumar</div><div class="sp-sub">Followed you · 1d ago</div></div><button class="connect-btn fb" onclick="followBack(this)">Follow Back</button></div>
+                    <div class="sp-item"><img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop&crop=face&q=80" alt=""><div class="sp-info"><div class="sp-name">Alex Martinez</div><div class="sp-sub">Followed you · 1d ago</div></div><button class="connect-btn fb" onclick="followBack(this)">Follow Back</button></div>
+                    <div class="sp-item"><img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&h=100&fit=crop&crop=face&q=80" alt=""><div class="sp-info"><div class="sp-name">Zara Ahmed</div><div class="sp-sub">Followed you · 2d ago</div></div><button class="connect-btn fb" onclick="followBack(this)">Follow Back</button></div>
+                    <div class="sp-item"><img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&h=100&fit=crop&crop=face&q=80" alt=""><div class="sp-info"><div class="sp-name">James Liu</div><div class="sp-sub">Followed you · 2d ago</div></div><button class="connect-btn fb" onclick="followBack(this)">Follow Back</button></div>
+                    <div class="sp-item"><img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop&crop=face&q=80" alt=""><div class="sp-info"><div class="sp-name">Sarah Wilson</div><div class="sp-sub">Followed you · 3d ago</div></div><button class="connect-btn fb" onclick="followBack(this)">Follow Back</button></div>
+                    <div class="sp-item"><img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=100&h=100&fit=crop&crop=face&q=80" alt=""><div class="sp-info"><div class="sp-name">Daniel Park</div><div class="sp-sub">Followed you · 3d ago</div></div><button class="connect-btn fb" onclick="followBack(this)">Follow Back</button></div>
+                    <div class="sp-item"><img src="https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=100&h=100&fit=crop&crop=face&q=80" alt=""><div class="sp-info"><div class="sp-name">Nina Torres</div><div class="sp-sub">Followed you · 4d ago</div></div><button class="connect-btn fb" onclick="followBack(this)">Follow Back</button></div>
+                    <div class="sp-item"><img src="https://images.unsplash.com/photo-1552058544-f2b08422138a?w=100&h=100&fit=crop&crop=face&q=80" alt=""><div class="sp-info"><div class="sp-name">Omar Malik</div><div class="sp-sub">Followed you · 4d ago</div></div><button class="connect-btn fb" onclick="followBack(this)">Follow Back</button></div>
+                    <div class="sp-item"><img src="https://images.unsplash.com/photo-1519345182560-3f2917c472ef?w=100&h=100&fit=crop&crop=face&q=80" alt=""><div class="sp-info"><div class="sp-name">Ryan Cooper</div><div class="sp-sub">Followed you · 5d ago</div></div><button class="connect-btn fb" onclick="followBack(this)">Follow Back</button></div>
+                    <div class="sp-item"><img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?w=100&h=100&fit=crop&crop=face&q=80" alt=""><div class="sp-info"><div class="sp-name">Jessica Moore</div><div class="sp-sub">Followed you · 5d ago</div></div><button class="connect-btn fb" onclick="followBack(this)">Follow Back</button></div>
+                    <div class="sp-item"><img src="https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=100&h=100&fit=crop&crop=face&q=80" alt=""><div class="sp-info"><div class="sp-name">Kevin Zhang</div><div class="sp-sub">Followed you · 6d ago</div></div><button class="connect-btn fb" onclick="followBack(this)">Follow Back</button></div>
+                    <div class="sp-item"><img src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=100&h=100&fit=crop&crop=face&q=80" alt=""><div class="sp-info"><div class="sp-name">Mia Johnson</div><div class="sp-sub">Followed you · 6d ago</div></div><button class="connect-btn fb" onclick="followBack(this)">Follow Back</button></div>
+                    <div class="sp-item"><img src="https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?w=100&h=100&fit=crop&crop=face&q=80" alt=""><div class="sp-info"><div class="sp-name">David Brown</div><div class="sp-sub">Followed you · 1w ago</div></div><button class="connect-btn fb" onclick="followBack(this)">Follow Back</button></div>
+                    <div class="sp-item"><img src="https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?w=100&h=100&fit=crop&crop=face&q=80" alt=""><div class="sp-info"><div class="sp-name">Sophie Adams</div><div class="sp-sub">Followed you · 1w ago</div></div><button class="connect-btn fb" onclick="followBack(this)">Follow Back</button></div>
+                    <div class="sp-item"><img src="https://images.unsplash.com/photo-1463453091185-61582044d556?w=100&h=100&fit=crop&crop=face&q=80" alt=""><div class="sp-info"><div class="sp-name">Chris Taylor</div><div class="sp-sub">Followed you · 1w ago</div></div><button class="connect-btn fb" onclick="followBack(this)">Follow Back</button></div>
+                    <div class="sp-item"><img src="https://images.unsplash.com/photo-1502685104226-ee32379fefbe?w=100&h=100&fit=crop&crop=face&q=80" alt=""><div class="sp-info"><div class="sp-name">Emily White</div><div class="sp-sub">Followed you · 2w ago</div></div><button class="connect-btn fb" onclick="followBack(this)">Follow Back</button></div>
+                    <div class="sp-item"><img src="https://images.unsplash.com/photo-1507591064344-4c6ce005b128?w=100&h=100&fit=crop&crop=face&q=80" alt=""><div class="sp-info"><div class="sp-name">Michael Scott</div><div class="sp-sub">Followed you · 2w ago</div></div><button class="connect-btn fb" onclick="followBack(this)">Follow Back</button></div>
+                    <div class="sp-item"><img src="https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=100&h=100&fit=crop&crop=face&q=80" alt=""><div class="sp-info"><div class="sp-name">Anna Lee</div><div class="sp-sub">Followed you · 2w ago</div></div><button class="connect-btn fb" onclick="followBack(this)">Follow Back</button></div>
+                </div>
+                <div class="connect-empty" id="followBackEmpty" style="display:none"><div class="connect-empty-title">You're all caught up! 🎉</div><div class="connect-empty-sub">No pending follow backs</div></div>
+            </div>
+        </div>
+
+        <!-- FRIENDS SUBPAGE -->
+        <div class="connect-subpage" id="friendsSubpage">
+            <div class="connect-subpage-hdr">
+                <div class="connect-subpage-back" onclick="closeConnectSubpage('friends')"><svg viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7"/></svg></div>
+                <div class="connect-subpage-title">Your Friends</div>
+                <span class="friends-count" id="friendsHeaderCount">12 friends</span>
+            </div>
+            <div class="connect-subpage-content" data-ptr="friends">
+                <div class="ptr-indicator" id="ptrFriends"><div class="ptr-bubble"><svg class="ptr-svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="48" fill="#F5F6F8"/><path class="ptr-path" fill="#33709D" d=""/></svg></div></div>
+                <div class="sp-list" id="friendsList">
+                    <div class="sp-item friend-item" data-name="Sarah Wilson"><img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop&crop=face&q=80" alt=""><div class="sp-info"><div class="sp-name">Sarah Wilson</div><div class="sp-sub">Friends since 3 months</div></div><button class="connect-btn unfriend-btn" onclick="showUnfriendPopup(this)">Unfriend</button></div>
+                    <div class="sp-item friend-item" data-name="Alex Martinez"><img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop&crop=face&q=80" alt=""><div class="sp-info"><div class="sp-name">Alex Martinez</div><div class="sp-sub">Friends since 2 months</div></div><button class="connect-btn unfriend-btn" onclick="showUnfriendPopup(this)">Unfriend</button></div>
+                    <div class="sp-item friend-item" data-name="Emma Chen"><img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop&crop=face&q=80" alt=""><div class="sp-info"><div class="sp-name">Emma Chen</div><div class="sp-sub">Friends since 5 months</div></div><button class="connect-btn unfriend-btn" onclick="showUnfriendPopup(this)">Unfriend</button></div>
+                    <div class="sp-item friend-item" data-name="Marcus Reed"><img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop&crop=face&q=80" alt=""><div class="sp-info"><div class="sp-name">Marcus Reed</div><div class="sp-sub">Friends since 1 month</div></div><button class="connect-btn unfriend-btn" onclick="showUnfriendPopup(this)">Unfriend</button></div>
+                    <div class="sp-item friend-item" data-name="Priya Kumar"><img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=100&h=100&fit=crop&crop=face&q=80" alt=""><div class="sp-info"><div class="sp-name">Priya Kumar</div><div class="sp-sub">Friends since 4 months</div></div><button class="connect-btn unfriend-btn" onclick="showUnfriendPopup(this)">Unfriend</button></div>
+                    <div class="sp-item friend-item" data-name="Daniel Park"><img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=100&h=100&fit=crop&crop=face&q=80" alt=""><div class="sp-info"><div class="sp-name">Daniel Park</div><div class="sp-sub">Friends since 6 months</div></div><button class="connect-btn unfriend-btn" onclick="showUnfriendPopup(this)">Unfriend</button></div>
+                    <div class="sp-item friend-item" data-name="Zara Ahmed"><img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&h=100&fit=crop&crop=face&q=80" alt=""><div class="sp-info"><div class="sp-name">Zara Ahmed</div><div class="sp-sub">Friends since 2 weeks</div></div><button class="connect-btn unfriend-btn" onclick="showUnfriendPopup(this)">Unfriend</button></div>
+                    <div class="sp-item friend-item" data-name="James Liu"><img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&h=100&fit=crop&crop=face&q=80" alt=""><div class="sp-info"><div class="sp-name">James Liu</div><div class="sp-sub">Friends since 1 month</div></div><button class="connect-btn unfriend-btn" onclick="showUnfriendPopup(this)">Unfriend</button></div>
+                    <div class="sp-item friend-item" data-name="Nina Torres"><img src="https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=100&h=100&fit=crop&crop=face&q=80" alt=""><div class="sp-info"><div class="sp-name">Nina Torres</div><div class="sp-sub">Friends since 3 months</div></div><button class="connect-btn unfriend-btn" onclick="showUnfriendPopup(this)">Unfriend</button></div>
+                    <div class="sp-item friend-item" data-name="Ryan Cooper"><img src="https://images.unsplash.com/photo-1519345182560-3f2917c472ef?w=100&h=100&fit=crop&crop=face&q=80" alt=""><div class="sp-info"><div class="sp-name">Ryan Cooper</div><div class="sp-sub">Friends since 2 months</div></div><button class="connect-btn unfriend-btn" onclick="showUnfriendPopup(this)">Unfriend</button></div>
+                    <div class="sp-item friend-item" data-name="Jessica Moore"><img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?w=100&h=100&fit=crop&crop=face&q=80" alt=""><div class="sp-info"><div class="sp-name">Jessica Moore</div><div class="sp-sub">Friends since 5 months</div></div><button class="connect-btn unfriend-btn" onclick="showUnfriendPopup(this)">Unfriend</button></div>
+                    <div class="sp-item friend-item" data-name="Omar Malik"><img src="https://images.unsplash.com/photo-1552058544-f2b08422138a?w=100&h=100&fit=crop&crop=face&q=80" alt=""><div class="sp-info"><div class="sp-name">Omar Malik</div><div class="sp-sub">Friends since 1 month</div></div><button class="connect-btn unfriend-btn" onclick="showUnfriendPopup(this)">Unfriend</button></div>
+                </div>
+                <div class="connect-empty" id="friendsEmpty" style="display:none"><div class="connect-empty-icon">👥</div><div class="connect-empty-title">No friends yet</div><div class="connect-empty-sub">People you connect with will appear here</div></div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- REELS PANEL -->
+    <div class="h-sec-panel" id="panelReels">
+        <div class="reels-grid">
+            <div class="reel-card"><img src="https://images.unsplash.com/photo-1534996858221-380b92700493?w=300&h=530&fit=crop&q=80" alt="" loading="lazy"><div class="reel-overlay"><div class="reel-play"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg></div><div class="reel-views"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>14.2K</div><div class="reel-creator"><img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=40&h=40&fit=crop&crop=face&q=80" alt=""><span>Alex</span></div></div></div>
+            <div class="reel-card"><img src="https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=300&h=530&fit=crop&q=80" alt="" loading="lazy"><div class="reel-overlay"><div class="reel-play"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg></div><div class="reel-views"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>8.7K</div><div class="reel-creator"><img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=40&h=40&fit=crop&crop=face&q=80" alt=""><span>Sarah</span></div></div></div>
+            <div class="reel-card"><img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=300&h=530&fit=crop&q=80" alt="" loading="lazy"><div class="reel-overlay"><div class="reel-play"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg></div><div class="reel-views"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>22.1K</div><div class="reel-creator"><img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=40&h=40&fit=crop&crop=face&q=80" alt=""><span>Emma</span></div></div></div>
+            <div class="reel-card"><img src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=300&h=530&fit=crop&q=80" alt="" loading="lazy"><div class="reel-overlay"><div class="reel-play"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg></div><div class="reel-views"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>5.3K</div><div class="reel-creator"><img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=40&h=40&fit=crop&crop=face&q=80" alt=""><span>Marcus</span></div></div></div>
+            <div class="reel-card"><img src="https://images.unsplash.com/photo-1524758631624-e2822e304c36?w=300&h=530&fit=crop&q=80" alt="" loading="lazy"><div class="reel-overlay"><div class="reel-play"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg></div><div class="reel-views"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>31.5K</div><div class="reel-creator"><img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=40&h=40&fit=crop&crop=face&q=80" alt=""><span>Priya</span></div></div></div>
+            <div class="reel-card"><img src="https://images.unsplash.com/photo-1513364776144-60967b0f800f?w=300&h=530&fit=crop&q=80" alt="" loading="lazy"><div class="reel-overlay"><div class="reel-play"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg></div><div class="reel-views"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>2.8K</div><div class="reel-creator"><img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=40&h=40&fit=crop&crop=face&q=80" alt=""><span>Daniel</span></div></div></div>
+        </div>
+    </div>
+
+    <!-- NOTIFICATIONS PANEL -->
+    <div class="h-sec-panel" id="panelNotif">
+        <div class="notif-hdr"><h3>Notifications</h3><span>Mark all read</span></div>
+        <div class="notif-sec">Today</div>
+        <div class="notif-list">
+            <div class="notif-item unread"><div class="notif-dot"></div><div class="notif-av"><img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop&crop=face&q=80" alt=""><div class="notif-av-icon like"><svg viewBox="0 0 24 24"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg></div></div><div class="notif-body"><div class="notif-text"><strong>Sarah Wilson</strong> and 23 others liked your post</div><div class="notif-time">2m ago</div></div><img class="notif-thumb" src="https://images.unsplash.com/photo-1524758631624-e2822e304c36?w=80&h=80&fit=crop&q=80" alt=""></div>
+            <div class="notif-item unread"><div class="notif-dot"></div><div class="notif-av"><img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=80&h=80&fit=crop&crop=face&q=80" alt=""><div class="notif-av-icon follow"><svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M19 16v6"/><path d="M22 19h-6"/></svg></div></div><div class="notif-body"><div class="notif-text"><strong>Zara Ahmed</strong> started following you</div><div class="notif-time">15m ago</div></div></div>
+            <div class="notif-item unread"><div class="notif-dot"></div><div class="notif-av"><img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=80&h=80&fit=crop&crop=face&q=80" alt=""><div class="notif-av-icon comment"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div></div><div class="notif-body"><div class="notif-text"><strong>Marcus Reed</strong> commented: "This is insane! 🔥"</div><div class="notif-time">32m ago</div></div><img class="notif-thumb" src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=80&h=80&fit=crop&q=80" alt=""></div>
+            <div class="notif-item"><div class="notif-av"><img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&h=80&fit=crop&crop=face&q=80" alt=""><div class="notif-av-icon room"><svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></div></div><div class="notif-body"><div class="notif-text"><strong>Alex Martinez</strong> invited you to <strong>Late Night Cinema</strong></div><div class="notif-time">1h ago</div></div></div>
+        </div>
+        <div class="notif-sec">Yesterday</div>
+        <div class="notif-list">
+            <div class="notif-item"><div class="notif-av"><img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=80&h=80&fit=crop&crop=face&q=80" alt=""><div class="notif-av-icon like"><svg viewBox="0 0 24 24"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg></div></div><div class="notif-body"><div class="notif-text"><strong>Emma Chen</strong> liked your reel</div><div class="notif-time">18h ago</div></div><img class="notif-thumb" src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=80&h=80&fit=crop&q=80" alt=""></div>
+            <div class="notif-item"><div class="notif-av"><img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=80&h=80&fit=crop&crop=face&q=80" alt=""><div class="notif-av-icon mention"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M16 8v5a3 3 0 0 0 6 0v-1a10 10 0 1 0-4 8"/></svg></div></div><div class="notif-body"><div class="notif-text"><strong>Priya Kumar</strong> mentioned you in Study Circle</div><div class="notif-time">Yesterday</div></div></div>
+            <div class="notif-item"><div class="notif-av"><img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=80&h=80&fit=crop&crop=face&q=80" alt=""><div class="notif-av-icon follow"><svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M19 16v6"/><path d="M22 19h-6"/></svg></div></div><div class="notif-body"><div class="notif-text"><strong>James Liu</strong> and 4 others started following you</div><div class="notif-time">Yesterday</div></div></div>
+        </div>
+    </div>
+</div><!-- end homePage -->
+
+<!-- UNFRIEND CONFIRMATION POPUP -->
+<div class="uf-overlay" id="unfriendOverlay" onclick="closeUnfriendPopup()">
+    <div class="uf-popup" onclick="event.stopPropagation()">
+        <div class="uf-popup-avatar" id="ufAvatar"></div>
+        <div class="uf-popup-title">Unfriend <span id="ufName"></span>?</div>
+        <div class="uf-popup-details">
+            <div class="uf-detail-item">
+                <svg viewBox="0 0 24 24"><path d="M18 6L6 18"/><path d="M6 6l12 12"/></svg>
+                <span>The connection will be removed from both sides — you'll no longer appear in each other's friend list.</span>
+            </div>
+            <div class="uf-detail-item">
+                <svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                <span>They won't be notified that you've removed them.</span>
+            </div>
+        </div>
+        <div class="uf-popup-actions">
+            <button class="uf-btn-cancel" onclick="closeUnfriendPopup()">Cancel</button>
+            <button class="uf-btn-confirm" id="ufConfirmBtn" onclick="confirmUnfriend()">Unfriend</button>
+        </div>
+    </div>
+</div>
+
+<!-- BOTTOM NAV -->
+<nav class="bnav">
+    <a class="nav-btn on" href="home.html">
+        <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+    </a>
+    <a class="nav-btn" href="rooms.html">
+        <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+    </a>
+    <a class="nav-btn" href="chats.html">
+        <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        <div class="nav-badge">15</div>
+    </a>
+    <a class="nav-btn" href="profile.html">
+        <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+    </a>
+</nav>
+
+<script>
+/* ══ Feed Filter Pills ══ */
+function swPill(el) {
+    document.querySelectorAll('.h-pill').forEach(p => p.classList.remove('on'));
+    el.classList.add('on');
+    feedAI.filterFeed(el.textContent.trim());
+}
+
+/* ══ Section Tabs ══ */
+function swSection(id, el) {
+    document.querySelectorAll('.h-sec-tab').forEach(t => t.classList.remove('on'));
+    el.classList.add('on');
+    var map = { all: 'panelAll', connect: 'panelConnect', reels: 'panelReels', notif: 'panelNotif' };
+    document.querySelectorAll('.h-sec-panel').forEach(p => p.classList.remove('on'));
+    var panel = document.getElementById(map[id]);
+    if (panel) panel.classList.add('on');
+    document.getElementById('homePage').scrollTop = 0;
+}
+
+/* ══ Connect Subpage Open/Close ══ */
+function openConnectSubpage(type) {
+    var subpage = document.getElementById(type + 'Subpage');
+    if (subpage) {
+        subpage.classList.add('open');
+        document.body.style.overflow = 'hidden';
+    }
+}
+
+function closeConnectSubpage(type) {
+    var subpage = document.getElementById(type + 'Subpage');
+    if (subpage) {
+        subpage.classList.remove('open');
+        document.body.style.overflow = '';
+    }
+}
+
+/* ══ Connect Button ══ */
+function toggleConnect(btn) {
+    var row = btn.closest('.sp-item') || btn.closest('.connect-item');
+    if (btn.classList.contains('done')) {
+        btn.classList.remove('done');
+        btn.textContent = 'Follow';
+        if (row) row.classList.remove('followed');
+    } else {
+        btn.style.transform = 'scale(0.92)';
+        btn.style.opacity = '0.6';
+        setTimeout(function(){
+            btn.classList.add('done');
+            btn.textContent = 'Following';
+            btn.style.transform = '';
+            btn.style.opacity = '';
+            if (row) row.classList.add('followed');
+        }, 150);
+    }
+}
+
+/* ══ Follow Back - Smart Toggle ══ */
+var followBackManager = {
+    pauseTimer: null,
+    PAUSE_DELAY: 2000,
+    
+    toggle: function(btn) {
+        var row = btn.closest('.sp-item') || btn.closest('.connect-item');
+        var isInPreview = btn.closest('#followedYouPreview') !== null;
+        var isInFullList = btn.closest('#followBackList') !== null;
+        
+        // If "Friends" → Revert to "Follow Back"
+        if (btn.classList.contains('friends')) {
+            btn.classList.remove('friends');
+            btn.classList.add('fb');
+            btn.textContent = 'Follow Back';
+            row.classList.remove('completed');
+            row.style.maxHeight = '';
+            return;
+        }
+        
+        // "Follow Back" → "Friends ✓"
+        btn.classList.remove('fb');
+        btn.classList.add('friends');
+        btn.textContent = 'Friends ✓';
+        row.classList.add('completed');
+        
+        // Only schedule exit for items in Follow Back full list
+        if (isInFullList) {
+            row.style.maxHeight = row.offsetHeight + 'px';
+            this.scheduleBatchExit();
+        }
+    },
+    
+    scheduleBatchExit: function() {
+        var self = this;
+        if (this.pauseTimer) clearTimeout(this.pauseTimer);
+        
+        this.pauseTimer = setTimeout(function() {
+            self.exitCompletedItems();
+        }, this.PAUSE_DELAY);
+    },
+    
+    exitCompletedItems: function() {
+        var completedItems = document.querySelectorAll('#followBackList .sp-item.completed:not(.exiting)');
+        if (completedItems.length === 0) return;
+        
+        completedItems.forEach(function(item, index) {
+            setTimeout(function() {
+                item.classList.add('exiting');
+                
+                setTimeout(function() {
+                    item.remove();
+                    updateFollowBackBadge();
+                    checkEmptyState();
+                }, 400);
+            }, index * 80);
+        });
+    }
+};
+
+function followBack(btn) {
+    followBackManager.toggle(btn);
+}
+
+function checkEmptyState() {
+    var list = document.getElementById('followBackList');
+    var empty = document.getElementById('followBackEmpty');
+    if (list && list.children.length === 0 && empty) {
+        empty.style.display = '';
+    }
+}
+
+function updateFollowBackBadge() {
+    var list = document.getElementById('followBackList');
+    var badge = document.querySelector('.connect-pill .pill-badge');
+    var countEl = document.getElementById('followedYouCount');
+    if (list) {
+        // Count only non-exiting items
+        var count = list.querySelectorAll('.sp-item:not(.exiting)').length;
+        if (badge) {
+            badge.textContent = count;
+            if (count === 0) badge.style.display = 'none';
+        }
+        if (countEl) {
+            countEl.textContent = count;
+        }
+    }
+}
+
+/* ══ Toggle Like ══ */
+function toggleLike(btn) { btn.classList.toggle('liked'); }
+
+/* ══ Toggle Follow ══ */
+function toggleFollow(btn) {
+    if (btn.classList.contains('following')) {
+        btn.classList.remove('following');
+        btn.textContent = '+ Follow';
+    } else {
+        btn.classList.add('following');
+        btn.textContent = 'Following \u2713';
+    }
+}
+
+/* ══ Ripple ══ */
+function ripple(e, el) {
+    var rect = el.getBoundingClientRect();
+    var r = document.createElement('div');
+    r.className = 'ripple';
+    r.style.left = (e.clientX - rect.left) + 'px';
+    r.style.top = (e.clientY - rect.top) + 'px';
+    r.style.width = r.style.height = '30px';
+    el.appendChild(r);
+    r.addEventListener('animationend', function() { r.remove(); });
+}
+
+/* ══ Pull to Refresh ══ */
+/*
+ * Research-based values (Android SwipeRefreshLayout defaults):
+ *   Slingshot distance: 64dp ≈ 70px (max indicator travel)
+ *   Trigger distance:   ~60px pull to fire refresh
+ *   Indicator rests at: ~40px from top during loading
+ *   Content shift:      minimal, ~10-14px
+ *   Damping:            heavy after threshold (rubber band)
+ *
+ * Our values:
+ *   MAX pull distance:  85px (capped, won't go further)
+ *   Threshold:          55px (fires refresh)
+ *   Arc starts:         28px (card ~55% visible)
+ *   Indicator rests at: 36px during loading
+ *   Content shift:      12px during loading
+ */
+function initPullToRefresh(){document.querySelectorAll('[data-ptr]').forEach(function(el){new PTR(el)})}
+function PTR(el){
+    this.el=el;this.ind=el.querySelector('.ptr-indicator');
+    this.svg=el.querySelector('.ptr-svg');this.path=el.querySelector('.ptr-path');
+    if(!this.ind||!this.path)return;
+    this.TH=55;this.MX=80;this.AS=22;
+    this.startY=0;this.d=0;this.busy=false;this.pull=false;
+    var me=this;
+    el.addEventListener('touchstart',function(e){me.ts(e)},{passive:true});
+    el.addEventListener('touchmove',function(e){me.tm(e)},{passive:false});
+    el.addEventListener('touchend',function(){me.te()},{passive:true});
+}
+PTR.prototype.mkPath=function(p){
+    if(p<.01)return'';
+    var cx=50,cy=50,rI=17.5,rO=24.5,rM=21,sa=38,span=p*290,ea=sa+span;
+    var la=span>180?1:0;
+    function pt(r,d){var a=d*Math.PI/180;return[cx+r*Math.cos(a),cy+r*Math.sin(a)]}
+    var tI=pt(rI,sa),tO=pt(rO,sa),bI=pt(rI,ea),bO=pt(rO,ea);
+    if(p<=.65)return'M'+tI[0]+' '+tI[1]+'L'+tO[0]+' '+tO[1]+'A '+rO+' '+rO+' 0 '+la+' 1 '+bO[0]+' '+bO[1]+'L'+bI[0]+' '+bI[1]+'A '+rI+' '+rI+' 0 '+la+' 0 '+tI[0]+' '+tI[1]+'Z';
+    var hp=Math.min((p-.65)/.35,1),hRI=rI-hp*(rI-10),hRO=rO+hp*(32-rO),hL=hp*13;
+    var hbI=pt(hRI,ea),hbO=pt(hRO,ea),bM=pt(rM,ea);
+    var ta=(ea+90)*Math.PI/180,tx=bM[0]+hL*Math.cos(ta),ty=bM[1]+hL*Math.sin(ta);
+    return'M'+tI[0]+' '+tI[1]+'L'+tO[0]+' '+tO[1]+'A '+rO+' '+rO+' 0 '+la+' 1 '+bO[0]+' '+bO[1]+'L'+hbO[0]+' '+hbO[1]+'L'+tx+' '+ty+'L'+hbI[0]+' '+hbI[1]+'L'+bI[0]+' '+bI[1]+'A '+rI+' '+rI+' 0 '+la+' 0 '+tI[0]+' '+tI[1]+'Z';
+};
+PTR.prototype.ts=function(e){
+    if(this.busy||this.el.scrollTop>0)return;
+    this.startY=e.touches[0].clientY;this.pull=true;this.d=0;
+    this.ind.classList.remove('snapping','releasing','refreshing');
+    this.ind.style.transition='none';this.el.style.transition='none';
+};
+PTR.prototype.tm=function(e){
+    if(!this.pull||this.busy)return;
+    var raw=e.touches[0].clientY-this.startY;
+    if(raw<0||this.el.scrollTop>0){this.d=0;return}
+    e.preventDefault();
+    // Heavy damping
+    this.d=Math.min(raw*.4,this.MX);
+    // Bubble: 36px, CSS top:-38px. Bottom edge = d-2.
+    // At d=2 → 0px visible. d=22(AS) → 20px = 55% visible.
+    this.ind.style.transform='translateX(-50%) translateY('+this.d+'px)';
+    // Opacity: barely visible at d=8, full by d=35
+    if(this.d<8)this.ind.style.opacity=0;
+    else if(this.d<35)this.ind.style.opacity=(this.d-8)/27;
+    else this.ind.style.opacity=1;
+    if(this.d<this.AS){
+        this.path.setAttribute('d','');this.path.style.opacity='0';
+        this.svg.style.transform='';
+        this.el.style.transform='translateY('+(this.d*.15)+'px)';return;
+    }
+    var p=Math.min((this.d-this.AS)/(this.TH-this.AS),1);
+    this.path.setAttribute('d',this.mkPath(p));
+    this.path.style.opacity=(.2+p*.8);
+    // Rotation: -120→0 during growth, then gentle overpull 0→90
+    var rot;
+    if(this.d<=this.TH){rot=-120+p*120}
+    else{var op=Math.min((this.d-this.TH)/(this.MX-this.TH),1);rot=op*90}
+    this.svg.style.transform='rotate('+rot+'deg)';
+    this.el.style.transform='translateY('+(this.d*.15)+'px)';
+};
+PTR.prototype.te=function(){
+    if(!this.pull)return;this.pull=false;
+    this.d>=this.TH?this.go():this.no();
+};
+PTR.prototype.go=function(){
+    this.busy=true;
+    this.path.setAttribute('d',this.mkPath(1));
+    this.path.style.opacity='1';
+    this.ind.style.transition='';
+    this.ind.classList.add('snapping');
+    // Rest: bubble sits just below separator (top:-38 + translateY(38) = top at 0)
+    this.ind.style.transform='translateX(-50%) translateY(38px)';
+    this.ind.style.opacity='1';
+    this.el.style.transition='';
+    this.el.classList.add('shifting');
+    this.el.style.transform='translateY(12px)';
+    var me=this;
+    setTimeout(function(){
+        me.svg.style.transform='';
+        me.ind.classList.add('refreshing');
+    },230);
+    setTimeout(function(){me.done()},1500);
+};
+PTR.prototype.done=function(){
+    var me=this;
+    me.ind.classList.remove('refreshing','snapping');
+    me.ind.classList.add('releasing');
+    me.ind.style.transform='translateX(-50%) translateY(0)';
+    me.ind.style.opacity='0';
+    me.el.classList.remove('shifting');
+    me.el.classList.add('releasing');
+    me.el.style.transform='';
+    setTimeout(function(){
+        me.ind.classList.remove('releasing');
+        me.ind.style.transition='';
+        me.el.classList.remove('releasing');
+        me.el.style.transition='';
+        me.path.setAttribute('d','');me.path.style.opacity='0';
+        me.svg.style.transform='';me.busy=false;
+    },380);
+};
+PTR.prototype.no=function(){
+    var me=this;
+    me.ind.classList.add('releasing');
+    me.ind.style.transform='translateX(-50%) translateY(0)';
+    me.ind.style.opacity='0';
+    me.el.classList.add('releasing');
+    me.el.style.transform='';
+    setTimeout(function(){
+        me.ind.classList.remove('releasing');
+        me.ind.style.transition='';
+        me.el.classList.remove('releasing');
+        me.el.style.transition='';
+        me.path.setAttribute('d','');me.path.style.opacity='0';
+        me.svg.style.transform='';
+    },380);
+};
+
+/* ══ Unfriend Popup & Friends Management ══ */
+var unfriendTarget = null;
+
+function showUnfriendPopup(btn) {
+    var row = btn.closest('.friend-item');
+    if (!row) return;
+    unfriendTarget = row;
+    var name = row.getAttribute('data-name') || row.querySelector('.connect-name').textContent;
+    var avatarSrc = row.querySelector('img').src;
+    
+    document.getElementById('ufName').textContent = name;
+    var avatarEl = document.getElementById('ufAvatar');
+    avatarEl.innerHTML = '<img src="' + avatarSrc + '" alt="">';
+    
+    var overlay = document.getElementById('unfriendOverlay');
+    // Force reflow before adding class
+    overlay.offsetHeight;
+    requestAnimationFrame(function() {
+        overlay.classList.add('show');
+    });
+}
+
+function closeUnfriendPopup() {
+    var overlay = document.getElementById('unfriendOverlay');
+    overlay.classList.remove('show');
+    unfriendTarget = null;
+}
+
+function confirmUnfriend() {
+    if (!unfriendTarget) return;
+    var row = unfriendTarget;
+    closeUnfriendPopup();
+    
+    // Set explicit max-height before removing
+    row.style.maxHeight = row.offsetHeight + 'px';
+    // Force reflow
+    row.offsetHeight;
+    
+    requestAnimationFrame(function() {
+        row.classList.add('removing');
+        setTimeout(function() {
+            row.remove();
+            updateFriendsCount();
+        }, 450);
+    });
+}
+
+function updateFriendsCount() {
+    var list = document.getElementById('friendsList');
+    var count = list ? list.querySelectorAll('.friend-item:not(.removing)').length : 0;
+    var headerCount = document.getElementById('friendsHeaderCount');
+    var pillBadge = document.getElementById('friendsPillBadge');
+    
+    if (headerCount) headerCount.textContent = count + (count === 1 ? ' friend' : ' friends');
+    if (pillBadge) {
+        pillBadge.textContent = count;
+        if (count === 0) pillBadge.style.display = 'none';
+    }
+    
+    // Show empty state
+    var emptyEl = document.getElementById('friendsEmpty');
+    if (count === 0 && emptyEl) {
+        emptyEl.style.display = '';
+    }
+}
+
+/* ══ Theater Smart Feed AI ══ */
+var feedAI = {
+    scores: (function() { try { return JSON.parse(localStorage.getItem('theater_scores') || '{}'); } catch(e) { return {}; } })(),
+    weights: { view: 0.5, click: 2, like: 5, comment: 8, share: 10 },
+    track: function(type, action) {
+        if (!this.scores[type]) this.scores[type] = 0;
+        this.scores[type] += (this.weights[action] || 1);
+        this._save(); this._updateAISuggest();
+    },
+    trackView: function(type) { this.track(type, 'view'); },
+    _save: function() { try { localStorage.setItem('theater_scores', JSON.stringify(this.scores)); } catch(e) {} },
+    topInterests: function() {
+        return Object.entries(this.scores).sort(function(a,b){return b[1]-a[1];}).slice(0,4).map(function(e){return e[0];});
+    },
+    _updateAISuggest: function() {
+        var map = { photo:'\uD83D\uDCF8 Photo Posts', video:'\uD83C\uDFAC Video Content', reel:'\uD83C\uDFA5 Reels', text:'\uD83D\uDCAC Conversations', room:'\uD83C\uDFAC Cinema Rooms', channel:'\uD83D\uDCE1 Channels', story:'\u2728 Scenes', people:'\uD83D\uDC65 Communities', ad:'\uD83D\uDED9 Deals' };
+        var top = this.topInterests();
+        var chips = document.getElementById('aiChips');
+        if (!chips || top.length === 0) return;
+        var total = Object.values(this.scores).reduce(function(a,b){return a+b;},0);
+        if (total > 5) { chips.innerHTML = top.filter(function(t){return map[t];}).map(function(t){return '<span class="h-ai-chip" onclick="feedAI.track(\''+t+'\',\'click\')">'+map[t]+'</span>';}).join(''); }
+    },
+    filterFeed: function(pill) {
+        var feed = document.getElementById('homeFeed');
+        if (!feed) return;
+        var pilMap = { '\u2756 For You': null, 'Following': ['text','photo','video','reel'], '\uD83D\uDD34 Live': ['room'], 'Trending': ['trend','photo'], 'Rooms': ['room'], 'Channels': ['channel'] };
+        var allowed = pilMap[pill];
+        Array.from(feed.children).forEach(function(el) {
+            var t = el.dataset.type;
+            el.style.display = (!allowed || !t || allowed.indexOf(t) !== -1) ? '' : 'none';
+        });
+    },
+    _initObserver: function() {
+        if (!window.IntersectionObserver) return;
+        var self = this;
+        var obs = new IntersectionObserver(function(entries) {
+            entries.forEach(function(e) { if (e.isIntersecting && e.target.dataset.type) self.trackView(e.target.dataset.type); });
+        }, { threshold: 0.6 });
+        document.querySelectorAll('#homeFeed [data-type]').forEach(function(el) { obs.observe(el); });
+    },
+    init: function() {
+        this._updateAISuggest();
+        this._initObserver();
+
+    }
+};
+
+document.addEventListener('DOMContentLoaded', function() { 
+    feedAI.init(); 
+    initPullToRefresh();
+});
+</script>
+</body>
+</html>
